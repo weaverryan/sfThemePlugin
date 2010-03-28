@@ -1,0 +1,10 @@
+parameters:
+  
+  theme_manager.class:        sfSympalThemeManager        # Responsible for managing themes
+  
+services:
+
+  theme_manager:
+    class:                    %theme_manager.class%
+    shared:                   true
+    arguments:                [@controller, @request, @response]

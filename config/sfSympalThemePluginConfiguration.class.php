@@ -31,5 +31,24 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     
     $manager = new sfSympalThemeManager($event->getSubject());
     $event->getSubject()->set('theme_manager', $manager);
+    
+    /**
+     * @TODO Need to reimplement sfSympalConfiguration::getThemeForRequest()
+     * and then load that theme on context.load_factories.
+     * 
+     * This replaces some code removed from core
+     */
+    
+    /**
+     * @TODO Reimplement the listener on controller.change_action which
+     * reloads the theme.
+     * 
+     * See sfSympalControllerChangeActionListener
+     */
+    
+    /**
+     * @TODO sfSympalConfiguration::getThemes() and getAvailableThemes()
+     * need to get put back
+     */
   }
 }

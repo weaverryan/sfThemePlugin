@@ -48,7 +48,7 @@ class sfSympalTheme
   {
     if ($this->_layoutPath === null)
     {
-      $this->_layoutPath = $this->getLayoutPath();
+      $this->_layoutPath = $this->_findLayoutPath();
     }
 
     return $this->_layoutPath;

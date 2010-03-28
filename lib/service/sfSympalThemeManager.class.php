@@ -14,9 +14,12 @@
 class sfSympalThemeManager
 {
   /**
-   * @var sfContext
+   * Dependencies
    */
-  protected $_context;
+  protected
+    $_controller,
+    $_request,
+    $_response;
   
   /**
    * @var boolean Whether or not the current theme has been loaded
@@ -24,18 +27,18 @@ class sfSympalThemeManager
   protected $_isLoaded = false;
   
   /**
-   * @var string $_previousTheme The previous theme name
    * @var string $_currentTheme  The current theme name
    * @var array  $_themeObjects  Array of the instantiated sfSympalTheme objects
    */  
   protected
-    $_previousTheme,
-    $_currentTheme,
+    $_currentThemeName,
     $_themeObjects = array();
   
-  public function __construct(sfContext $context)
+  public function __construct(sfController $controller, sfRequest $request, sfResponse $response)
   {
-    $this->_context = $context;
+    $this->_controller = $controller;
+    $this->_request = $request;
+    $this->_response = $response;
   }
 
   /**
@@ -48,13 +51,13 @@ class sfSympalThemeManager
    */
   public function setCurrentTheme($theme)
   {
-    if ($theme->getName() != $this->getCurrentThemeName())
+    if ($theme != $this->getCurrentThemeName())
     {
       // unload the current theme
       $this->_unloadCurrentTheme();
       
       // set the current theme and load it
-      $this->_currentTheme = $this->getName();
+      $this->_currentThemeName = $theme;
       $this->_loadCurrentTheme();
     }
   }
@@ -64,12 +67,10 @@ class sfSympalThemeManager
    */
   protected function _loadCurrentTheme()
   {
-    if ($this->isLoaded())
+    if ($this->isLoaded() || !$theme = $this->getCurrentTheme())
     {
       return;
     }
-    
-    $theme = $this->getCurrentTheme();
 
     // Change the layout
     $this->_changeLayout($theme->getLayoutPath());
@@ -81,7 +82,7 @@ class sfSympalThemeManager
     $this->_addJavascripts($theme->getJavascripts());
 
     // Invoke any callables
-    $this->_invokeCallables($callables);
+    $this->_invokeCallables($theme->getCallables());
 
     // Set loaded flag
     $this->_isLoaded = true;
@@ -92,8 +93,11 @@ class sfSympalThemeManager
    */
   protected function _unloadCurrentTheme()
   {
-    $theme = $this->getCurrentTheme();
-    
+    if (!$theme = $this->getCurrentTheme())
+    {
+      return;
+    }
+
     // Remove theme stylesheets
     $this->_removeStylesheets($theme->getStylesheets());
 
@@ -104,14 +108,14 @@ class sfSympalThemeManager
   }
 
   /**
-   * Changes the current context's layout to the given layout path
+   * Changes the current layout to the given layout path
    */
   protected function _changeLayout($layoutPath)
   {
     $info = pathinfo($layoutPath);
     $path = $info['dirname'].'/'.$info['filename'];
     
-    $actionEntry = $this->getContext()->getController()->getActionStack()->getLastEntry();
+    $actionEntry = $this->_controller->getActionStack()->getLastEntry();
     $module = $actionEntry ? $actionEntry->getModuleName() : $this->_request->getParameter('module');
     $action = $actionEntry ? $actionEntry->getActionName() : $this->_request->getParameter('action');
 
@@ -127,10 +131,9 @@ class sfSympalThemeManager
    */
   protected function _addStylesheets($stylesheets)
   {
-    $response = $this->getContext()->getResponse();
     foreach ($stylesheets as $stylesheet)
     {
-      $response->addStylesheet(sfSympalConfig::getAssetPath($stylesheet), 'last');
+      $this->_response->addStylesheet(sfSympalConfig::getAssetPath($stylesheet), 'last');
     }
   }
 
@@ -141,10 +144,9 @@ class sfSympalThemeManager
    */
   protected function _addJavascripts($javascripts)
   {
-    $response = $this->getContext()->getResponse();
     foreach ($javascripts as $javascript)
     {
-      $response->addJavascript(sfSympalConfig::getAssetPath($javascript));
+      $this->_response->addJavascript(sfSympalConfig::getAssetPath($javascript));
     }
   }
 
@@ -173,10 +175,9 @@ class sfSympalThemeManager
    */
   protected function _removeStylesheets($stylesheets)
   {
-    $response = $this->getContext()->getResponse();
     foreach ($stylesheets as $stylesheet)
     {
-      $response->removeStylesheet(sfSympalConfig::getAssetPath($stylesheet));
+      $this->_response->removeStylesheet(sfSympalConfig::getAssetPath($stylesheet));
     }
   }
 
@@ -185,10 +186,9 @@ class sfSympalThemeManager
    */
   public function _removeJavascripts($javascripts)
   {
-    $response = $this->getContext()->getResponse();
     foreach ($javascripts as $javascript)
     {
-      $response->removeJavascript(sfSympalConfig::getAssetPath($javascript));
+      $this->_response->removeJavascript(sfSympalConfig::getAssetPath($javascript));
     }
   }
 
@@ -209,7 +209,7 @@ class sfSympalThemeManager
    */
   public function getCurrentThemeName()
   {
-    return $this->_currentTheme;
+    return $this->_currentThemeName;
   }
 
   /**
@@ -219,7 +219,7 @@ class sfSympalThemeManager
    */
   public function getCurrentTheme()
   {
-    return $this->getCurrentThemeName() ? $this->getTheme($this->_currentTheme) : false;
+    return $this->getCurrentThemeName() ? $this->getTheme($this->getCurrentThemeName()) : false;
   }
 
   /**
@@ -245,15 +245,5 @@ class sfSympalThemeManager
     }
 
     return $this->_themeObjects[$theme];
-  }
-
-  /**
-   * Returns the sfContext instance attached to this theme
-   * 
-   * @return sfContext
-   */
-  public function getContext()
-  {
-    return $this->_context;
   }
 }
