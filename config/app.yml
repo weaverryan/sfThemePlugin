@@ -2,6 +2,28 @@ all:
   sympal_config:
     theme:
       enabled:    true
+    
+    themes:
+      default:
+        available: true
+        disabled: false
+        layout: default
+        stylesheets:
+          - /sfSympalThemePlugin/css/default.css
+
+      wordpress_default:
+        available: true
+        disabled: false
+        layout: wordpress
+        stylesheets:
+          - /sfSympalThemePlugin/css/wordpress.css
+
+      sympal:
+        available: true
+        disabled: false
+        layout: sympal
+        stylesheets:
+          - /sfSympalThemePlugin/css/sympal.css
       
     # Configure the default theme to render Sympal with
     default_theme: default
