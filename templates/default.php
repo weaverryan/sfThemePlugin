@@ -12,8 +12,8 @@
 <body>
   <div id="container">
   	<div id="header">
-  	  <h1><?php echo link_to($sf_sympal_context->getSite()->getTitle(), '@sympal_homepage') ?></h1>
-  	  <h2><?php echo $sf_sympal_context->getSite()->getDescription() ?></h2>
+  	  <h1><?php echo link_to($sf_sympal_site->getTitle(), '@homepage') ?></h1>
+  	  <h2><?php echo $sf_sympal_site->getDescription() ?></h2>
   	</div>
   	<div id="content">
       <?php echo $sf_content ?>
