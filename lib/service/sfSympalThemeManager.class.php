@@ -17,9 +17,7 @@ class sfSympalThemeManager
    * Dependencies
    */
   protected
-    $_controller,
-    $_request,
-    $_response;
+    $_context;
   
   protected
     $_themes,
@@ -38,11 +36,9 @@ class sfSympalThemeManager
     $_currentThemeName,
     $_themeObjects = array();
   
-  public function __construct(sfController $controller, sfRequest $request, sfResponse $response)
+  public function __construct(sfContext $context)
   {
-    $this->_controller = $controller;
-    $this->_request = $request;
-    $this->_response = $response;
+    $this->_context = $context;
   }
 
   /**
@@ -119,9 +115,9 @@ class sfSympalThemeManager
     $info = pathinfo($layoutPath);
     $path = $info['dirname'].'/'.$info['filename'];
     
-    $actionEntry = $this->_controller->getActionStack()->getLastEntry();
-    $module = $actionEntry ? $actionEntry->getModuleName() : $this->_request->getParameter('module');
-    $action = $actionEntry ? $actionEntry->getActionName() : $this->_request->getParameter('action');
+    $actionEntry = $this->_context->getController()->getActionStack()->getLastEntry();
+    $module = $actionEntry ? $actionEntry->getModuleName() : $this->_context->getRequest()->getParameter('module');
+    $action = $actionEntry ? $actionEntry->getActionName() : $this->_context->getRequest()->getParameter('action');
 
     sfConfig::set('symfony.view.'.$module.'_'.$action.'_layout', $path);
     sfConfig::set('symfony.view.sympal_default_error404_layout', $path);
@@ -135,9 +131,10 @@ class sfSympalThemeManager
    */
   protected function _addStylesheets($stylesheets)
   {
+    $response = $this->_context->getResponse();
     foreach ($stylesheets as $stylesheet)
     {
-      $this->_response->addStylesheet(sfSympalConfig::getAssetPath($stylesheet), 'last');
+      $response->addStylesheet(sfSympalConfig::getAssetPath($stylesheet), 'last');
     }
   }
 
@@ -148,9 +145,10 @@ class sfSympalThemeManager
    */
   protected function _addJavascripts($javascripts)
   {
+    $response = $this->_context->getResponse();
     foreach ($javascripts as $javascript)
     {
-      $this->_response->addJavascript(sfSympalConfig::getAssetPath($javascript));
+      $response->addJavascript(sfSympalConfig::getAssetPath($javascript));
     }
   }
 
