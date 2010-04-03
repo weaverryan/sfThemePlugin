@@ -16,8 +16,11 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     // Only bootstrap if theming is disabled
     if (sfSympalConfig::get('theme', 'enable'))
     {
-      $this->dispatcher->connect('context.load_factories', array($this, 'bootstrap'));
+      $this->dispatcher->connect('sympal.load', array($this, 'bootstrap'));
     }
+    
+    $themeUser = new sfSympalThemeUser();
+    $this->dispatcher->connect('user.method_not_found', array($themeUser, 'extend'));
   }
   
   /**
