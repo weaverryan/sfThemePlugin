@@ -36,7 +36,7 @@ class sfSympalThemeActions extends sfSympalExtendClass
     }
     else
     {
-      $this->getSympalContext()->loadTheme(sfSympalConfig::get('default_theme'));
+      $this->getSympalContext()->loadTheme(sfSympalConfig::get('theme', 'default_theme'));
     }
   }
 
@@ -47,7 +47,7 @@ class sfSympalThemeActions extends sfSympalExtendClass
    */
   public function loadDefaultTheme()
   {
-    $this->loadTheme(sfSympalConfig::get('default_theme'));
+    $this->loadTheme(sfSympalConfig::get('theme', 'default_theme'));
   }
 
   /**
