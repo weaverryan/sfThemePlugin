@@ -30,7 +30,7 @@
       <h2><?php echo __('Navigation') ?></h2>
 
   	  <?php if ($menu): ?>
-        <?php echo $menu ?>
+        <?php echo $menu->render() ?>
       <?php else: ?>
         <ul>
           <?php if (!$sf_user->isAuthenticated()): ?>
