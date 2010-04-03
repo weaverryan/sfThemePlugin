@@ -88,7 +88,7 @@ class sfSympalTheme
   protected function _findLayoutPath()
   {
     $layout = $this->getLayout();
-    $sympalConfiguration = sfSympalContext::getInstance()->getSympalConfiguration();
+    $sympalConfiguration = sfSympalConfiguration::getActive();
 
     $layouts = $sympalConfiguration->getLayouts();
     $path = array_search($layout, $layouts);
