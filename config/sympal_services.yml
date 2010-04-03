@@ -11,7 +11,7 @@ services:
   theme_manager:
     class:                    %theme_manager.class%
     shared:                   true
-    arguments:                [@controller, @request, @response]
+    arguments:                [@context]
   
   theme_dispatcher:
     class:                    %theme_dispatcher.class%
