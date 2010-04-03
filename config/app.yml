@@ -22,6 +22,19 @@ all:
         # my_route:      theme_name
     
     themes:
+      # my_theme:
+      #   available: false       # Don't show in the list of available themes to switch to
+      #   disabled: false
+      #   layout:   my_theme
+      #   admin_generator_class: sfSympalDoctrineGenerator
+      #   admin_generator_theme: sympal_admin
+      #   javascripts:
+      #     - /sfSympalPlugin/js/jQuery.cookie.js
+      #   stylesheets:
+      #     - /sfSympalPlugin/fancybox/jquery.fancybox.css
+      #   callables:
+      #     - [sfSympalToolkit, useJQuery]
+
       default:
         available: true
         disabled: false
