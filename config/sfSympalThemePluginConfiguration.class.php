@@ -47,6 +47,12 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
      */
   }
 
+  /**
+   * Listens to the controller.change_action event to set the correct theme
+   * when the action changes
+   * 
+   * @param sfEvent $event The controller.change_action event object
+   */
   public function listenControllerChangeAction(sfEvent $event)
   {
     $sympalContext = sfSympalContext::getInstance();
