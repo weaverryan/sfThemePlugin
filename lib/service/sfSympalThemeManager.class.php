@@ -21,6 +21,10 @@ class sfSympalThemeManager
     $_request,
     $_response;
   
+  protected
+    $_themes,
+    $_availableThemes;
+  
   /**
    * @var boolean Whether or not the current theme has been loaded
    */
@@ -245,5 +249,51 @@ class sfSympalThemeManager
     }
 
     return $this->_themeObjects[$theme];
+  }
+
+  /**
+   * Get array of all themes that are not disabled.
+   *
+   * @return array $themes
+   */
+  public function getThemes()
+  {
+    if ($this->_themes === null)
+    {
+      $themes = sfSympalConfig::get('themes', null, array());
+      foreach ($themes as $name => $theme)
+      {
+        if (isset($theme['disabled']) && $theme['disabled'] === true)
+        {
+          continue;
+        }
+        $this->_themes[$name] = $theme;
+      }
+    }
+
+    return $this->_themes;
+  }
+
+  /**
+   * Get array of all themes that are not disabled and available for selection
+   *
+   * @return array $availableThemes
+   */
+  public function getAvailableThemes()
+  {
+    if ($this->_availableThemes === null)
+    {
+      $themes = $this->getThemes();
+      foreach ($themes as $name => $theme)
+      {
+        if (!isset($theme['available']) || (isset($theme['available']) && $theme['available'] === false))
+        {
+          continue;
+        }
+        $this->_availableThemes[$name] = $theme;
+      }
+    }
+
+    return $this->_availableThemes;
   }
 }

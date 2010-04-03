@@ -4,6 +4,8 @@ parameters:
   
   theme_dispatcher.class:     sfSympalThemeDispatcher     # Responsible for determining the correct theme for a request, module, route, etc
   
+  theme_form_toolkit.class:   sfSympalThemeFormToolkit    # Handles tasks related to forms & themes
+  
 services:
 
   theme_manager:
@@ -14,4 +16,9 @@ services:
   theme_dispatcher:
     class:                    %theme_dispatcher.class%
     shared:                   true
+    arguments:                []
+
+  theme_form_toolkit:
+    class:                    %theme_form_toolkit.class%
+    shared:                   false
     arguments:                []

@@ -40,11 +40,6 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     {
       $event->getSubject()->getService('theme_manager')->setCurrentTheme($theme);
     }
-    
-    /**
-     * @TODO sfSympalConfiguration::getThemes() and getAvailableThemes()
-     * need to get put back
-     */
   }
 
   /**
