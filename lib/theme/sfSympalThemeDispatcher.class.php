@@ -21,7 +21,7 @@ class sfSympalThemeDispatcher
    * 
    * @return string The theme (defaults to the default theme)
    */
-  protected function getThemeForRequest(sfContext $context)
+  public function getThemeForRequest(sfContext $context)
   {
     $event = $context->getEventDispatcher()->notifyUntil(new sfEvent($this, 'sympal.theme.set_theme_from_request', array(
       'context' => $context,

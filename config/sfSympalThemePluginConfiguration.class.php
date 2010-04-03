@@ -14,7 +14,7 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
   public function initialize()
   {
     // Only bootstrap if theming is disabled
-    if (sfSympalConfig::get('theme', 'enable'))
+    if (sfSympalConfig::get('theme', 'enabled'))
     {
       $this->dispatcher->connect('sympal.load', array($this, 'bootstrap'));
     }
@@ -33,7 +33,12 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     $this->dispatcher->connect('component.method_not_found', array($actionObject, 'extend'));
     
     $themeDispatcher = $event->getSubject()->getService('theme_dispatcher');
-    $theme = $themeDispatcher->getThemeForRequest();
+    $theme = $themeDispatcher->getThemeForRequest($event->getSubject()->getSymfonyContext());
+    
+    if ($theme)
+    {
+      $event->getSubject()->getService('theme_manager')->setCurrentTheme($theme);
+    }
     
     /**
      * @TODO Need to reimplement sfSympalConfiguration::getThemeForRequest()
