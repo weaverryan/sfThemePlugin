@@ -32,8 +32,8 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     $actionObject = new sfSympalThemeActions();
     $this->dispatcher->connect('component.method_not_found', array($actionObject, 'extend'));
     
-    $manager = new sfSympalThemeManager($event->getSubject());
-    $event->getSubject()->set('theme_manager', $manager);
+    $themeDispatcher = $event->getSubject()->getService('theme_dispatcher');
+    $theme = $themeDispatcher->getThemeForRequest();
     
     /**
      * @TODO Need to reimplement sfSympalConfiguration::getThemeForRequest()
