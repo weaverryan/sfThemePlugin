@@ -17,6 +17,7 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     if (sfSympalConfig::get('theme', 'enabled'))
     {
       $this->dispatcher->connect('sympal.load', array($this, 'bootstrap'));
+      $this->dispatcher->connect('controller.change_action', array($this, 'listenControllerChangeAction'));
     }
     
     $themeUser = new sfSympalThemeUser();
@@ -41,22 +42,15 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     }
     
     /**
-     * @TODO Need to reimplement sfSympalConfiguration::getThemeForRequest()
-     * and then load that theme on context.load_factories.
-     * 
-     * This replaces some code removed from core
-     */
-    
-    /**
-     * @TODO Reimplement the listener on controller.change_action which
-     * reloads the theme.
-     * 
-     * See sfSympalControllerChangeActionListener
-     */
-    
-    /**
      * @TODO sfSympalConfiguration::getThemes() and getAvailableThemes()
      * need to get put back
      */
+  }
+
+  public function listenControllerChangeAction(sfEvent $event)
+  {
+    $sympalContext = sfSympalContext::getInstance();
+    $themeDispatcher = $sympalContext->getService('theme_dispatcher');
+    $theme = $themeDispatcher->getThemeForRequest($sympalContext->getSymfonyContext());
   }
 }
