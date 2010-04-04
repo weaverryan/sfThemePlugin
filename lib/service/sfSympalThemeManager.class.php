@@ -237,7 +237,7 @@ class sfSympalThemeManager
       $config = sfSympalConfig::get('themes', $theme);
       if (!$config)
       {
-        throw new sfException(sprintf('Cannot load the "%s" theme: no configuration found.'));
+        throw new sfException(sprintf('Cannot load the "%s" theme: no configuration found.', $theme));
       }
 
       $themeClass = isset($config['theme_class']) ? $config['theme_class'] : 'sfSympalTheme';
