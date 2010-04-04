@@ -102,7 +102,7 @@ class sfSympalThemeManager
     $this->_removeStylesheets($theme->getStylesheets());
 
     // Remove theme javascripts
-    $this->removeJavascripts($theme->getJavascripts());
+    $this->_removeJavascripts($theme->getJavascripts());
     
     $this->_isLoaded = false;
   }
@@ -286,7 +286,7 @@ class sfSympalThemeManager
       $themes = $this->getThemes();
       foreach ($themes as $name => $theme)
       {
-        if (!isset($theme['available']) || (isset($theme['available']) && $theme['available'] === false))
+        if (isset($theme['available']) && !$theme['available'])
         {
           continue;
         }
