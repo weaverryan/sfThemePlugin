@@ -19,7 +19,7 @@ class sfSympalThemeActions extends sfSympalExtendClass
    */
   public function loadTheme($name)
   {
-    $this->loadTheme($name);
+    $this->getSympalContext()->getService('theme_manager')->setCurrentTheme($name);
   }
 
   /**
