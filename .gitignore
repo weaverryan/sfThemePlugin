@@ -1,3 +1,4 @@
 cache
 log
 base
+test/fixtures/project/config/app.yml
