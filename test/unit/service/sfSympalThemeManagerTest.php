@@ -27,5 +27,5 @@ try {
 }
 catch (Exception $e)
 {
-  $t->pass();
+  $t->pass('Exception thrown');
 }
