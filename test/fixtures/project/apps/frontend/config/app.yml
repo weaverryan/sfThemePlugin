@@ -1,0 +1,13 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/11-App
+
+# default values
+all:
+  sympal_config:
+    themes:
+      disabled_theme:
+        disabled:    true
+
+      unavailable_theme:
+        disabled:    false
+        available:   false
