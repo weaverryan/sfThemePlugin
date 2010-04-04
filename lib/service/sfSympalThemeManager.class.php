@@ -177,9 +177,10 @@ class sfSympalThemeManager
    */
   protected function _removeStylesheets($stylesheets)
   {
+    $response = $this->_context->getResponse();
     foreach ($stylesheets as $stylesheet)
     {
-      $this->_response->removeStylesheet(sfSympalConfig::getAssetPath($stylesheet));
+      $response->removeStylesheet(sfSympalConfig::getAssetPath($stylesheet));
     }
   }
 
@@ -188,9 +189,10 @@ class sfSympalThemeManager
    */
   public function _removeJavascripts($javascripts)
   {
+    $response = $this->_context->getResponse();
     foreach ($javascripts as $javascript)
     {
-      $this->_response->removeJavascript(sfSympalConfig::getAssetPath($javascript));
+      $response->removeJavascript(sfSympalConfig::getAssetPath($javascript));
     }
   }
 
