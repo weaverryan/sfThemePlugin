@@ -1,0 +1,9 @@
+all:
+  sympal_config:
+    themes:
+      test_theme:
+        available: true
+        disabled:  false
+        layout:    layout_for_testing
+        javascripts:
+          - /sfSympalThemeTestPlugin/js/testing.js

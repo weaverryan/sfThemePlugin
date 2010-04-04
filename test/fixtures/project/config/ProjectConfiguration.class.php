@@ -15,6 +15,6 @@ class ProjectConfiguration extends sfProjectConfiguration
     $this->setPlugins(array('sfSympalThemePlugin'));
     $this->setPluginPath('sfSympalThemePlugin', dirname(__FILE__).'/../../../..');
     
-    $this->enablePlugins(array('sfSympalPlugin'));
+    $this->enablePlugins(array('sfSympalPlugin', 'sfSympalThemeTestPlugin'));
   }
 }
