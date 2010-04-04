@@ -59,7 +59,7 @@ class sfSympalThemeDispatcher
       return $theme;
     }
     
-    return sfSympalConfig::get('theme', 'default_theme');
+    return sfSympalConfig::get('theme', 'default_theme', false);
   }
 
   /**
