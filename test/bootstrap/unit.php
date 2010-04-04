@@ -20,7 +20,7 @@ if (!isset($app))
   $configuration = new ProjectConfiguration($projectPath);
 } else {
   $configuration = ProjectConfiguration::getApplicationConfiguration($app, 'test', isset($debug) ? $debug : true);
-  sfContext::createInstance($configuration);
+  $context = sfContext::createInstance($configuration);
 }
 
 require_once $configuration->getSymfonyLibDir().'/vendor/lime/lime.php';
