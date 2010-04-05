@@ -361,7 +361,6 @@ table {
 	-moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  background: #c1dbff;
 }
 
 table thead tr th {
@@ -369,9 +368,7 @@ table thead tr th {
 }
 
 table tbody tr td {
-  background: #ffffff;
   border: none;
-  border-bottom: 1px solid #ccc;
 }
 
 table tbody tr th {
