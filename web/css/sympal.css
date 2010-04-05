@@ -31,7 +31,7 @@ body { font:13px/1.231 "Lucida Grande",verdana,arial,helvetica,clean,sans-serif;
 body {
 	margin:                       0;
 	padding:                      0;
-	background:                   url(../images/backplate.jpg) no-repeat top center;
+	background:                   url(../images/sympal/backplate.jpg) no-repeat top center;
 	background-color:             #000000;
 }
 
@@ -117,7 +117,7 @@ h3 {
  width:                        100%;
  height:                       65px;
  margin:                       0;
- background:                   url(../images/header_background.gif) repeat-x;
+ background:                   url(../images/sympal/header_background.gif) repeat-x;
 	-khtml-border-radius:10px;
 	-moz-border-radius: 10px;
  -webkit-border-radius: 10px;
@@ -126,7 +126,7 @@ h3 {
 
 #header #logo {
  position:                     relative;
- background-image:             url(../images/header_logo.gif);
+ background-image:             url(../images/sympal/header_logo.gif);
  background-position:          left center;
  background-repeat:            no-repeat;
  width:                        200px;
@@ -149,7 +149,7 @@ h3 {
 #top_navigation,
 .top_navigation_head,
 .top_navigation_head div {
- background:                   url(../images/top_navigation_plate.gif) no-repeat top right;
+ background:                   url(../images/sympal/top_navigation_plate.gif) no-repeat top right;
  white-space: nowrap;
 }
 
@@ -199,13 +199,13 @@ h3 {
 }
 
 #top_navigation ul li a:hover {
- background:                   url(../images/top_navigation_arrow.gif) no-repeat top center;
+ background:                   url(../images/sympal/top_navigation_arrow.gif) no-repeat top center;
  cursor:                       pointer;
  color:                        #11A8FF;
 }
 
 #top_navigation .current a {
-  background:                   url(../images/top_navigation_arrow.gif) no-repeat top center;
+  background:                   url(../images/sympal/top_navigation_arrow.gif) no-repeat top center;
   color:                        #11A8FF;
 }
 
@@ -217,7 +217,7 @@ h3 {
   width:                        100%;
   margin:                       0;
   padding:                      30px 0 0 0;
-  background:                   url(../images/content_header.gif) no-repeat top center;  
+  background:                   url(../images/sympal/content_header.gif) no-repeat top center;  
   background-color: #fff;
  	-khtml-border-radius:10px;
 	-moz-border-radius: 10px;
@@ -243,7 +243,7 @@ h3 {
 */
 
 .roundedbox, .roundedbox_body, .roundedbox_head, .roundedbox_head div {
- background:                   #FFFFFF url(../images/column_box_ie.gif) no-repeat bottom right;
+ background:                   #FFFFFF url(../images/sympal/column_box_ie.gif) no-repeat bottom right;
 }
 
 .roundedbox {
@@ -387,7 +387,7 @@ table tfoot tr td {
 #sympal_breadcrumbs ul
 {
   font: 11px Arial, Helvetica, sans-serif;
-  background-image: url('../images/bc_bg.png');
+  background-image: url('../images/sympal/bc_bg.png');
   background-repeat: repeat-x;
   height: 30px;
   line-height: 30px;
@@ -413,7 +413,7 @@ table tfoot tr td {
 
 #sympal_breadcrumbs li.first
 {
-  background: url('../images/home.png') no-repeat;
+  background: url('../images/sympal/home.png') no-repeat;
   background-position: center;
   text-indent: -9999;
   font-size: 0;
@@ -431,7 +431,7 @@ table tfoot tr td {
 {
   height: 30px;
   display: block;
-  background-image: url('../images/bc_separator.png');
+  background-image: url('../images/sympal/bc_separator.png');
   background-repeat: no-repeat;
   background-position: right;
   padding-right: 15px;
@@ -454,7 +454,7 @@ ul.error_list li
   padding-left: 25px;
   list-style: none;
   color: #fff;
-  background: url(../images/error.png) no-repeat 4px 4px;
+  background: url(../images/sympal/error.png) no-repeat 4px 4px;
 }
 
 #sympal_ask_confirmation {
@@ -518,13 +518,13 @@ ul.error_list li
 .sympal_notice {
   margin: 4px 0;
   padding: 4px 4px 4px 30px;
-  background: url(../images/tick.png) no-repeat 10px 4px;
+  background: url(../images/sympal/tick.png) no-repeat 10px 4px;
 }
 
 .sympal_error {
   margin: 4px 0;
   padding: 4px 4px 4px 30px;
-  background: url(../images/error.png) no-repeat 10px 4px;
+  background: url(../images/sympal/error.png) no-repeat 10px 4px;
   background-color: #f33;
   color: red;
 }
