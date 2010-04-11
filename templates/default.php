@@ -21,7 +21,7 @@
   	</div>
   	<?php $menu = $cmfInstalled ? get_sympal_menu('primary') : false; ?>
   	<div id="sidebar">
-      <?php if ($cmfInstalled()) ?>
+      <?php if ($cmfInstalled): ?>
         <h2><?php echo __('Search') ?></h2>
         <?php echo get_partial('sympal_search/form') ?>
       <?php endif; ?>
