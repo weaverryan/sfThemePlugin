@@ -11,6 +11,9 @@
  */
 class sfSympalThemePluginConfiguration extends sfPluginConfiguration
 {
+  protected
+    $_sympalContext;
+
   public function initialize()
   {
     // Only bootstrap if theming is disabled
@@ -22,23 +25,31 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     
     $themeUser = new sfSympalThemeUser();
     $this->dispatcher->connect('user.method_not_found', array($themeUser, 'extend'));
+
+    // Connect to the sympal.load_admin_menu event
+    $this->dispatcher->connect('sympal.load_admin_menu', array($this, 'setupAdminMenu'));
+
+    // Connect to the sympal.load_config_form evnet
+    $this->dispatcher->connect('sympal.load_config_form', array($this, 'loadConfigForm'));
   }
   
   /**
-   * Bootstraps the plugin
+   * Listnes to sympal.load. Bootstraps the plugin
    */
   public function bootstrap(sfEvent $event)
   {
+    $this->_sympalContext = $event->getSubject();
+    
     // extend the actions class to sfSympalThemeActions
     $actionObject = new sfSympalThemeActions();
     $this->dispatcher->connect('component.method_not_found', array($actionObject, 'extend'));
     
-    $themeDispatcher = $event->getSubject()->getService('theme_dispatcher');
-    $theme = $themeDispatcher->getThemeForRequest($event->getSubject()->getSymfonyContext());
+    $themeDispatcher = $this->_sympalContext->getService('theme_dispatcher');
+    $theme = $themeDispatcher->getThemeForRequest($this->_sympalContext->getSymfonyContext());
     
     if ($theme)
     {
-      $event->getSubject()->getService('theme_manager')->setCurrentTheme($theme);
+      $this->_sympalContext->getService('theme_manager')->setCurrentTheme($theme);
     }
   }
 
@@ -53,5 +64,28 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
     $sympalContext = sfSympalContext::getInstance();
     $themeDispatcher = $sympalContext->getService('theme_dispatcher');
     $theme = $themeDispatcher->getThemeForRequest($sympalContext->getSymfonyContext());
+  }
+
+  /**
+   * Listens to the sympal.load_admin_menu to configure the admin menu
+   */
+  public function setupAdminMenu(sfEvent $event)
+  {
+    $administration = $menu->getChild('administration');
+    
+    $administration->addChild('Themes', '@sympal_themes')
+      ->setCredentials(array('ManageThemes'));
+  }
+
+  /**
+   * Listens to the sympal.load_config_form and allows for customization
+   * of the config form
+   */
+  public function loadConfigForm(sfEvent $event)
+  {
+    $form = $event->getSubject();
+
+    $array = $this->_sympalContext->getService('theme_form_toolkit')->getThemeWidgetAndValidator();
+    $form->addSetting('theme', 'default_theme', 'Default Theme', $array['widget'], $array['validator']);
   }
 }
