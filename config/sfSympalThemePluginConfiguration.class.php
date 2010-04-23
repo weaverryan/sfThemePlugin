@@ -34,7 +34,7 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
   }
   
   /**
-   * Listnes to sympal.load. Bootstraps the plugin
+   * Listens to sympal.load. Bootstraps the plugin
    */
   public function bootstrap(sfEvent $event)
   {
