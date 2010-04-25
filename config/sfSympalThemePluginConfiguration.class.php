@@ -71,6 +71,8 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
    */
   public function setupAdminMenu(sfEvent $event)
   {
+    $menu = $event->getSubject();
+    
     $administration = $menu->getChild('administration');
     
     $administration->addChild('Themes', '@sympal_themes')
