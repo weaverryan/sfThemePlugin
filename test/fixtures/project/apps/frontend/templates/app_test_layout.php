@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="/favicon.ico" />
   </head>
   <body>
-    <h1>Test Layout</h1>
+    <h1>Application Test Layout</h1>
     <?php echo $sf_content ?>
   </body>
 </html>
