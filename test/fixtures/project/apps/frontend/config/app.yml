@@ -3,7 +3,11 @@
 
 # default values
 all:
-  sympal_config:
+  theme:
+    
+    controller_options:
+      default_theme:    app_test
+    
     themes:
       disabled_theme:
         disabled:    true

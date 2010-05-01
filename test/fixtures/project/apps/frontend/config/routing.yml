@@ -1,16 +1,13 @@
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/10-Routing
+custom_theme:
+  url:   /themes/:theme
+  param: { module: test, action: customTheme }
 
-# default rules
+default_theme:
+  url:   /set_default_theme
+  param: { module: test, action: defaultTheme }
+
+
+# Keep this - we rely on it to match for a few unit tests that are context-dependent
 homepage:
   url:   /
   param: { module: default, action: index }
-
-# generic rules
-# please, remove them by adding more specific rules
-default_index:
-  url:   /:module
-  param: { action: index }
-
-default:
-  url:   /:module/:action/*
