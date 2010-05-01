@@ -56,9 +56,8 @@ configuring a theme consists of defining each of these components in `app.yml`:
         themes:
           new_design:
             layout:       new_design
-            stylesheets:
-              - main.css
-            javascripts: []
+            stylesheets:  [main, print: { media: print }]
+            javascripts:  []
 
 The layout can exist in the `templates` directory of your application or in
 the `templates` directory of any application. This means that your entire
