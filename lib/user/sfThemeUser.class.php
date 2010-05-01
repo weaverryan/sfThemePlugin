@@ -16,7 +16,7 @@ class sfThemeUser
    * Listens to the component.method_not_found event to effectively
    * extend the actions class
    */
-  public function listenComponentMethodNotFound(sfEvent $event)
+  public function listenUserMethodNotFound(sfEvent $event)
   {
     $this->_user = $event->getSubject();
     $method = $event['method'];
@@ -44,7 +44,7 @@ class sfThemeUser
    */
   public function setCurrentTheme($theme)
   {
-    $this->setAttribute('current_theme', $theme);
+    $this->_user->setAttribute('current_theme', $theme);
   }
 
   /**
@@ -54,6 +54,6 @@ class sfThemeUser
    */
   public function getCurrentTheme()
   {
-    return $this->getAttribute('current_theme');
+    return $this->_user->getAttribute('current_theme');
   }
 }

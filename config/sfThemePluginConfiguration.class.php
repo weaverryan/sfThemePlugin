@@ -44,11 +44,11 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
 
       // extend the user class
       $themeUser = new sfThemeUser();
-      $this->dispatcher->connect('user.method_not_found', array($themeUser, 'extend'));
+      $this->dispatcher->connect('user.method_not_found', array($themeUser, 'listenUserMethodNotFound'));
 
       // extend the actions class
       $actionObject = new sfThemeActions($this->getThemeController());
-      $this->dispatcher->connect('component.method_not_found', array($actionObject, 'extend'));
+      $this->dispatcher->connect('component.method_not_found', array($actionObject, 'listenComponentMethodNotFound'));
     }
   }
   
@@ -61,7 +61,7 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
     $this->_context = $event->getSubject();
     
     // create the theme manager instance
-    $this->_themeManager = sfThemeManager::createInstance();
+    $this->_themeManager = sfThemeManager::createInstance($this->_context);
 
     // Refresh the theme from the context
     $this->_refreshTheme();
@@ -86,7 +86,7 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
    */
   protected function _refreshTheme()
   {
-    $theme = $this->getThemeController()->getThemeForRequest($context);
+    $theme = $this->getThemeController()->getThemeForRequest($this->_context);
     
     // If we found a theme we should use, set it on the theme manager
     if ($theme)
@@ -135,7 +135,7 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
   {
     if ($this->_themeToolkit === null)
     {
-      $this->_themeToolkit = sfThemeToolkit::createInstance();
+      $this->_themeToolkit = sfThemeToolkit::createInstance($this->configuration);
     }
     
     return $this->_themeToolkit;

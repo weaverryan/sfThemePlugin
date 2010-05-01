@@ -59,12 +59,12 @@ class sfThemeController
       return $event->getReturnValue();
     }
     
-    if (sfSympalConfig::get('theme', 'allow_changing_theme_by_url'))
+    if ($this->getOption('allow_changing_theme_by_url', true))
     {
       $user = $context->getUser();
       $request = $context->getRequest();
 
-      if ($theme = $request->getParameter(sfSympalConfig::get('theme', 'theme_request_parameter_name', 'sf_theme')))
+      if ($theme = $request->getParameter($this->getOption('theme_request_parameter_name', 'sf_theme')))
       {
         $user->setCurrentTheme($theme);
 
@@ -86,7 +86,7 @@ class sfThemeController
       return $theme;
     }
     
-    return sfSympalConfig::get('theme', 'default_theme', false);
+    return $this->getOption('default_theme');
   }
 
   /**
@@ -96,13 +96,13 @@ class sfThemeController
    */
   protected function getThemeFromConfig($module, $route)
   {
-    $modules = sfSympalConfig::get('theme', 'modules', array());
+    $modules = $this->getOption('modules', array());
     if (array_key_exists($module, $modules))
     {
       return $modules[$module];
     }
     
-    $routes = sfSympalConfig::get('theme', 'routes', array());
+    $routes = $this->getOption('routes', array());
     if (array_key_exists($module, $routes))
     {
       return $routes[$module];
@@ -139,7 +139,7 @@ class sfThemeController
    * 
    * @return sfThemeController
    */
-  public function createInstance()
+  public static function createInstance()
   {
     $class = sfConfig::get('app_theme_controller_class', 'sfThemeController');
     $options = sfConfig::get('app_theme_controller_options', array());
