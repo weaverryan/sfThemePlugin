@@ -1,12 +1,20 @@
 <?php
 
+if (!isset($_SERVER['SYMFONY']))
+{
+  throw new RuntimeException('Could not find symfony core libraries.');
+}
+
+require_once $_SERVER['SYMFONY'].'/autoload/sfCoreAutoload.class.php';
+sfCoreAutoload::register();
+
 class ProjectConfiguration extends sfProjectConfiguration
 {
   public function setup()
   {
-    $this->setPlugins(array('sfSympalThemePlugin'));
-    $this->setPluginPath('sfSympalThemePlugin', dirname(__FILE__).'/../../../..');
+    $this->setPlugins(array('sfThemePlugin'));
+    $this->setPluginPath('sfThemePlugin', dirname(__FILE__).'/../../../..');
     
-    $this->enablePlugins(array('sfSympalThemeTestPlugin'));
+    $this->enablePlugins(array('sfThemeTestPlugin'));
   }
 }
