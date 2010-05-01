@@ -22,10 +22,12 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
   /**
    * @var sfThemeManager    The manager instance for the application
    * @var sfThemeController The controller instance for the application
+   * @var sfThemeToolkit    The toolkit instance for the application
    */
   protected
     $_themeManager,
-    $_themeController;
+    $_themeController,
+    $_themeToolkit;
 
   /**
    * Initializes the plugin
@@ -124,5 +126,18 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
     }
     
     return $this->_themeController;
+  }
+
+  /**
+   * Returns the theme toolkit, which is a general-purpose worker class
+   */
+  public function getThemeToolkit()
+  {
+    if ($this->_themeToolkit === null)
+    {
+      $this->_themeToolkit = sfThemeToolkit::createInstance();
+    }
+    
+    return $this->_themeToolkit;
   }
 }

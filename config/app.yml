@@ -28,6 +28,12 @@ all:
       allow_changing_theme_by_url: true
       theme_request_parameter_name: sf_sympal_theme
 
+    cache:
+      enabled:  true
+      class:    sfFileCache
+      options:
+        cache_dir:  <?php echo sfConfig::get('sf_app_cache_dir') ?>/theme
+
     themes:
       # my_theme:
       #   available: false       # Don't show in the list of available themes to switch to
