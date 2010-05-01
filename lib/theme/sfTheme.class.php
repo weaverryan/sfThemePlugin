@@ -14,11 +14,9 @@ class sfTheme
 {
   /**
    * @var array  The configuration array
-   * @var string The absolute path to the layout for this theme
    */
   protected
-    $_config,
-    $_layoutPath;
+    $_config;
 
   /**
    * @param array $config The array of configuration for this theme
