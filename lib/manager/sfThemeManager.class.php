@@ -82,7 +82,7 @@ class sfThemeManager
   }
 
   /**
-   * Adds a theme to the theme manager
+   * Set/add a theme to the theme manager
    * 
    * The theme can be an sfTheme instance of just theme configuration
    * 
@@ -90,11 +90,12 @@ class sfThemeManager
    * @param mixed $theme  Either an sfTheme object or an array of configuration
    *                      that can be used to create a theme object
    */
-  public function addTheme($name, $theme)
+  public function setTheme($name, $theme)
   {
     if ($theme instanceof sfTheme)
     {
       $this->_themeObjects[$name] = $theme;
+      $this->_themes[$name] = $theme->getConfig();
     }
     else
     {
@@ -103,7 +104,7 @@ class sfThemeManager
        * the theme configuration to the array
        */
       unset($this->_themeObjects[$name]);
-      $this->_themes[$theme] = $theme;
+      $this->_themes[$name] = $theme;
     }
   }
 
