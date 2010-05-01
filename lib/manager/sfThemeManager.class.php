@@ -163,7 +163,7 @@ class sfThemeManager
     $response = $this->_context->getResponse();
     foreach ($stylesheets as $stylesheet)
     {
-      $response->addStylesheet(sfSympalConfig::getAssetPath($stylesheet), 'last');
+      $response->addStylesheet($stylesheet, 'last');
     }
   }
 
@@ -177,7 +177,7 @@ class sfThemeManager
     $response = $this->_context->getResponse();
     foreach ($javascripts as $javascript)
     {
-      $response->addJavascript(sfSympalConfig::getAssetPath($javascript));
+      $response->addJavascript($javascript);
     }
   }
 
@@ -209,7 +209,7 @@ class sfThemeManager
     $response = $this->_context->getResponse();
     foreach ($stylesheets as $stylesheet)
     {
-      $response->removeStylesheet(sfSympalConfig::getAssetPath($stylesheet));
+      $response->removeStylesheet($stylesheet);
     }
   }
 
@@ -221,7 +221,7 @@ class sfThemeManager
     $response = $this->_context->getResponse();
     foreach ($javascripts as $javascript)
     {
-      $response->removeJavascript(sfSympalConfig::getAssetPath($javascript));
+      $response->removeJavascript($javascript);
     }
   }
 
