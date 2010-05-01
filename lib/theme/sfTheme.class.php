@@ -14,66 +14,38 @@ class sfTheme
 {
   /**
    * @var array  The configuration array
-   * @var sfThemeToolkit The toolkit instance, used to get the theme's layout path
-   */
-  protected
-    $_config,
-    $_themeToolkit;
-
-  /**
    * @var string The absolute path to the layout for this theme
    */
   protected
+    $_config,
     $_layoutPath;
 
   /**
    * @param array $config The array of configuration for this theme
    */
-  public function __construct($config, sfThemeToolkit $themeToolkit)
+  public function __construct($config)
   {
     $this->_config = $config;
-    $this->_themeToolkit = $themeToolkit;
   }
 
-  /**
-   * Returns the absolute path to the layout for this theme
-   */
-  public function getLayoutPath()
+  public function getLayout()
   {
-    if ($this->_layoutPath === null)
-    {
-      $this->_layoutPath = $this->_findLayoutPath();
-    }
-
-    return $this->_layoutPath;
+    return $this->getConfig('layout');
   }
-  
-  /**
-   * Calculates the location of the layout, which could live in several locations.
-   * 
-   * Specifically, the layout file for a theme could live in any "templates"
-   * file found in the application dir or any enabled plugins
-   */
-  protected function _findLayoutPath()
+
+  public function getStylesheets()
   {
-    $layout = $this->getConfig('layout');
-    $layouts = $this->_themeToolkit->getLayouts();
-    $path = array_search($layout, $layouts);
+    return $this->getConfig('stylesheets', array());
+  }
 
-    if (!$path)
-    {
-      throw new InvalidArgumentException(sprintf(
-        'Could not find layout "%s" in any "templates" directories. You may need to clear your cache.',
-        $layout
-      ));
-    }
+  public function getJavascripts()
+  {
+    return $this->getConfig('javascripts', array());
+  }
 
-    if (!sfToolkit::isPathAbsolute($path))
-    {
-      $path = sfConfig::get('sf_root_dir').'/'.$path;
-    }
-
-    return $path;
+  public function getCallables()
+  {
+    return $this->getConfig('callables', array());
   }
 
   /**

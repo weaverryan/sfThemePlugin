@@ -50,7 +50,7 @@ class sfThemeManager
    * @param array $themes   An array of theme configurations to be used as
    *                        the available themes to switch to
    */
-  public function __construct(sfContext $context, $themes = array(), $themClass = 'sfTheme')
+  public function __construct(sfContext $context, $themes = array(), $themeClass = 'sfTheme')
   {
     $this->_context = $context;
     $this->_themes = $themes;
@@ -93,7 +93,7 @@ class sfThemeManager
     }
 
     // Change the layout
-    $this->_changeLayout($theme->getLayoutPath());
+    $this->_changeLayout($this->_getLayoutPath($theme->getLayout()));
 
     // Add theme stylesheets to response
     $this->_addStylesheets($theme->getStylesheets());
@@ -123,7 +123,7 @@ class sfThemeManager
 
     // Remove theme javascripts
     $this->_removeJavascripts($theme->getJavascripts());
-    
+
     $this->_isLoaded = false;
   }
 
@@ -308,6 +308,46 @@ class sfThemeManager
     }
 
     return $this->_availableThemes;
+  }
+
+  /**
+   * Returns the absolute path to the layout for a given layout name
+   */
+  protected function _getLayoutPath($layout)
+  {
+    if (!isset($this->_layoutPaths[$layout]))
+    {
+      $this->_layoutPaths[$layout] = $this->_findLayoutPath($layout);
+    }
+
+    return $this->_layoutPaths[$layout];
+  }
+  
+  /**
+   * Calculates the location of a layout, which could live in several locations.
+   * 
+   * Specifically, the layout file for a theme could live in any "templates"
+   * file found in the application dir or any enabled plugins
+   */
+  protected function _findLayoutPath($layout)
+  {
+    $layouts = $this->_getThemeToolkit()->getLayouts();
+    $path = array_search($layout, $layouts);
+
+    if (!$path)
+    {
+      throw new InvalidArgumentException(sprintf(
+        'Could not find layout "%s" in any "templates" directories. You may need to clear your cache.',
+        $layout
+      ));
+    }
+
+    if (!sfToolkit::isPathAbsolute($path))
+    {
+      $path = sfConfig::get('sf_root_dir').'/'.$path;
+    }
+
+    return $path;
   }
 
   /**
