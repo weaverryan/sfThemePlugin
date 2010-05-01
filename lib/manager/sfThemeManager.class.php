@@ -67,6 +67,9 @@ class sfThemeManager
    */
   public function setCurrentTheme($theme)
   {
+    // Make sure the theme object exists, this will trigger an exception if it does not
+    $this->getThemeObject($theme);
+    
     // don't load the theme if it's already the current theme
     if ($theme == $this->getCurrentTheme())
     {
@@ -90,7 +93,7 @@ class sfThemeManager
    * @param mixed $theme  Either an sfTheme object or an array of configuration
    *                      that can be used to create a theme object
    */
-  public function setTheme($name, $theme)
+  public function addTheme($name, $theme)
   {
     if ($theme instanceof sfTheme)
     {
@@ -114,7 +117,7 @@ class sfThemeManager
   protected function _loadCurrentTheme()
   {
     // don't load if we're already loaded or don't have a current theme
-    if ($this->isLoaded() || !$theme = $this->getCurrentThemeObject())
+    if ($this->_isLoaded || !$theme = $this->getCurrentThemeObject())
     {
       return;
     }
@@ -253,16 +256,6 @@ class sfThemeManager
   }
 
   /**
-   * Returns whether or not the current theme has been loaded
-   * 
-   * @return boolean
-   */
-  public function isLoaded()
-  {
-    return $this->_isLoaded;
-  }
-
-  /**
    * Returns the name of the currently loaded theme
    * 
    * @return string
@@ -387,5 +380,21 @@ class sfThemeManager
     return $this->_context->getConfiguration()
       ->getPluginConfiguration('sfThemePlugin')
       ->getThemeToolkit();
+  }
+
+  /**
+   * Creates a new instance of this class based on the available application configuration.
+   * 
+   * This should not be called directly - use sfThemePluginConfiguration::getThemeManager() instead
+   * 
+   * @return sfThemeController
+   */
+  public static function createInstance(sfContext $context)
+  {
+    $class = sfConfig::get('app_theme_manager_class', 'sfThemeManager');
+    $themes = sfConfig::get('app_theme_themes', array());
+    $themeClass = sfConfig::get('app_theme_theme_class', 'sfTheme');
+    
+    return new $class($context, $themes, $themeClass);
   }
 }
