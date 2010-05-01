@@ -3,12 +3,39 @@
 /**
  * Acts as an extension of sfUser
  * 
- * @package     sfSympalThemePlugin
+ * @package     sfThemePlugin
  * @subpackage  user
+ * @author      Jonathan H. Wage <jonwage@gmail.com>
  * @author      Ryan Weaver <ryan@thatsquality.com>
  */
-class sfSympalThemeUser extends sfSympalExtendClass
+class sfThemeUser
 {
+  protected $_user;
+  
+  /**
+   * Listens to the component.method_not_found event to effectively
+   * extend the actions class
+   */
+  public function listenComponentMethodNotFound(sfEvent $event)
+  {
+    $this->_user = $event->getSubject();
+    $method = $event['method'];
+    $arguments = $event['arguments'];
+
+    if (method_exists($this, $method))
+    {
+      $result = call_user_func_array(array($this, $method), $arguments);
+
+      $event->setReturnValue($result);
+
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
   /**
    * Set the current theme for the users session
    *
@@ -17,7 +44,7 @@ class sfSympalThemeUser extends sfSympalExtendClass
    */
   public function setCurrentTheme($theme)
   {
-    $this->setAttribute('sympal_current_theme', $theme);
+    $this->setAttribute('current_theme', $theme);
   }
 
   /**
@@ -27,6 +54,6 @@ class sfSympalThemeUser extends sfSympalExtendClass
    */
   public function getCurrentTheme()
   {
-    return $this->getAttribute('sympal_current_theme');
+    return $this->getAttribute('current_theme');
   }
 }

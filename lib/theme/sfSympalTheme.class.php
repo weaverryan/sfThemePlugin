@@ -3,14 +3,14 @@
 /**
  * Represents a theme
  * 
- * @package     sfSympalThemePlugin
+ * @package     sfThemePlugin
  * @subpackage  theme
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  * @author      Ryan Weaver <ryan@thatsquality.com>
  * @since       2010-03-27
  * @version     svn:$Id$ $Author$
  */
-class sfSympalTheme
+class sfTheme
 {
   /**
    * @var string The name of the plugin

@@ -1,24 +1,28 @@
 <?php
 /**
- * Class that manages the current theme
+ * Keeps track of the current theme and manages the changing of themes
  * 
- * There should be one theme per context instance
+ * There should be one theme manager per application configuration
  * 
- * @package     sfSympalThemePlugin
+ * @package     sfThemePlugin
  * @subpackage  theme
  * @author      Ryan Weaver <ryan@thatsquality.com>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  * @since       2010-03-27
  * @version     svn:$Id$ $Author$
  */
-class sfSympalThemeManager
+class sfThemeManager
 {
   /**
    * Dependencies
    */
   protected
     $_context;
-  
+
+  /**
+   * @var array An array of all of the available themes and their configurations
+   * @var array An array of theme names that are available to be switched to
+   */
   protected
     $_themes,
     $_availableThemes;
@@ -35,7 +39,12 @@ class sfSympalThemeManager
   protected
     $_currentThemeName,
     $_themeObjects = array();
-  
+
+  /**
+   * Class constructor
+   * 
+   * @param sfContext $context
+   */
   public function __construct(sfContext $context)
   {
     $this->_context = $context;

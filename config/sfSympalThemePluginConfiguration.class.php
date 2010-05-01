@@ -3,54 +3,69 @@
 /**
  * Plugin configuration for the theme plugin
  * 
- * @package     sfSympalThemePlugin
+ * @package     sfThemePlugin
  * @subpackage  config
  * @author      Ryan Weaver <ryan@thatsquality.com>
  * @since       2010-03-27
  * @version     svn:$Id$ $Author$
  */
-class sfSympalThemePluginConfiguration extends sfPluginConfiguration
+class sfThemePluginConfiguration extends sfPluginConfiguration
 {
+  /**
+   * @var sfContext Stored here so we can access it in the controller.change_action
+   *                event because the controller, frustratingly, doesn't
+   *                have an accessor for its context property.
+   */
   protected
-    $_sympalContext;
+    $_context;
 
+  /**
+   * @var sfThemeManager    The manager instance for the application
+   * @var sfThemeDispatcher The dispatcher instance for the application
+   */
+  protected
+    $_themeManager,
+    $_themeDispatcher;
+
+  /**
+   * Initializes the plugin
+   */
   public function initialize()
   {
-    // Only bootstrap if theming is disabled
-    if (sfSympalConfig::get('theme', 'enabled'))
+    // Only bootstrap if theming is enabled
+    if (sfConfig::get('app_theme_enabled', false))
     {
-      $this->dispatcher->connect('sympal.load', array($this, 'bootstrap'));
+      $this->dispatcher->connect('context.load_factories', array($this, 'bootstrap'));
+      
+      // Add a listener on controller.change_action - key to setting correct theme
       $this->dispatcher->connect('controller.change_action', array($this, 'listenControllerChangeAction'));
+
+      // extend the user class
+      $themeUser = new sfThemeUser();
+      $this->dispatcher->connect('user.method_not_found', array($themeUser, 'extend'));
+
+      // extend the actions class
+      $actionObject = new sfThemeActions(
+        sfConfig::get('app_theme_default_theme'),
+        sfConfig::get('app_theme_admin_theme')
+      );
+      $this->dispatcher->connect('component.method_not_found', array($actionObject, 'extend'));
     }
-    
-    $themeUser = new sfSympalThemeUser();
-    $this->dispatcher->connect('user.method_not_found', array($themeUser, 'extend'));
-
-    // Connect to the sympal.load_admin_menu event
-    $this->dispatcher->connect('sympal.load_admin_menu', array($this, 'setupAdminMenu'));
-
-    // Connect to the sympal.load_config_form evnet
-    $this->dispatcher->connect('sympal.load_config_form', array($this, 'loadConfigForm'));
   }
   
   /**
-   * Listens to sympal.load. Bootstraps the plugin
+   * Listens to context.load_factories. Bootstraps the plugin
    */
   public function bootstrap(sfEvent $event)
   {
-    $this->_sympalContext = $event->getSubject();
+    // store the context so we can use it for other listeners
+    $this->_context = $event->getSubject();
     
-    // extend the actions class to sfSympalThemeActions
-    $actionObject = new sfSympalThemeActions();
-    $this->dispatcher->connect('component.method_not_found', array($actionObject, 'extend'));
-    
-    $themeDispatcher = $this->_sympalContext->getService('theme_dispatcher');
-    $theme = $themeDispatcher->getThemeForRequest($this->_sympalContext->getSymfonyContext());
-    
-    if ($theme)
-    {
-      $this->_sympalContext->getService('theme_manager')->setCurrentTheme($theme);
-    }
+    // create the theme manager instance
+    $this->_themeManager = sfThemeManager::createInstance();
+
+    // Refresh the theme from the context
+    $this->_refreshTheme();
   }
 
   /**
@@ -60,34 +75,58 @@ class sfSympalThemePluginConfiguration extends sfPluginConfiguration
    * @param sfEvent $event The controller.change_action event object
    */
   public function listenControllerChangeAction(sfEvent $event)
-  {
-    $sympalContext = sfSympalContext::getInstance();
-    $themeDispatcher = $sympalContext->getService('theme_dispatcher');
-    $theme = $themeDispatcher->getThemeForRequest($sympalContext->getSymfonyContext());
+  {    
+    // Refresh the theme from the context
+    $this->_refreshTheme();
   }
 
   /**
-   * Listens to the sympal.load_admin_menu to configure the admin menu
+   * Re-determines the correct theme that should be used based off of a
+   * variety of information on the context and then sets the theme if
+   * one is found
    */
-  public function setupAdminMenu(sfEvent $event)
+  protected function _refreshTheme()
   {
-    $menu = $event->getSubject();
+    $theme = $this->getThemeDispatcher()->getThemeForRequest($context);
     
-    $administration = $menu->getChild('administration');
-    
-    $administration->addChild('Themes', '@sympal_themes')
-      ->setCredentials(array('ManageThemes'));
+    // If we found a theme we should use, set it on the theme manager
+    if ($theme)
+    {
+      $this->getThemeManager()->setCurrentTheme($theme);
+    }
   }
 
   /**
-   * Listens to the sympal.load_config_form and allows for customization
-   * of the config form
+   * Returns the current sfThemeManager instance for the application
+   * 
+   * The theme manager is loaded automatically on context.load_factories
+   * 
+   * @return sfThemeManager
    */
-  public function loadConfigForm(sfEvent $event)
+  public function getThemeManager()
   {
-    $form = $event->getSubject();
+    if ($this->_themeManager === null)
+    {
+      throw new sfException('No theme manager instance found');
+    }
+    
+    return $this->_themeManager;
+  }
 
-    $array = $this->_sympalContext->getService('theme_form_toolkit')->getThemeWidgetAndValidator();
-    $form->addSetting('theme', 'default_theme', 'Default Theme', $array['widget'], $array['validator']);
+  /**
+   * Returns the theme dispatcher class, which is responsible for figuring
+   * out what theme should be used based on a variety of variables
+   * 
+   * @return sfThemeDispatcher
+   */
+  public function getThemeDispatcher()
+  {
+    if ($this->_themeDispatcher === null)
+    {
+      $class = sfConfig::get('app_theme_dispatcher_class', 'sfThemeDispatcher');
+      $this->_themeDispatcher = new $class();
+    }
+    
+    return $this->_themeDispatcher;
   }
 }
