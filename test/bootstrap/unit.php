@@ -8,22 +8,23 @@ if (!isset($_SERVER['SYMFONY']))
 require_once $_SERVER['SYMFONY'].'/autoload/sfCoreAutoload.class.php';
 sfCoreAutoload::register();
 
-$projectPath = dirname(__FILE__).'/../fixtures/project';
-require_once($projectPath.'/config/ProjectConfiguration.class.php');
-
-
-
-//require_once(dirname(__FILE__).'/cleanup.php');
-
-if (!isset($app))
-{
-  $configuration = new ProjectConfiguration($projectPath);
-} else {
-  $configuration = ProjectConfiguration::getApplicationConfiguration($app, 'test', isset($debug) ? $debug : true);
-  $context = sfContext::createInstance($configuration);
-}
-
+$configuration = new sfProjectConfiguration(dirname(__FILE__).'/../fixtures/project');
 require_once $configuration->getSymfonyLibDir().'/vendor/lime/lime.php';
 
-//require_once dirname(__FILE__).'/../../config/sfSympalPluginConfiguration.class.php';
-//$plugin_configuration = new sfSympalPluginConfiguration($configuration, dirname(__FILE__).'/../..');
+function sfContentFilterPlugin_autoload_again($class)
+{
+  $autoload = sfSimpleAutoload::getInstance();
+  $autoload->reload();
+  return $autoload->autoload($class);
+}
+spl_autoload_register('sfContentFilterPlugin_autoload_again');
+
+if (file_exists($config = dirname(__FILE__).'/../../config/sfContentFilterPluginConfiguration.class.php'))
+{
+  require_once $config;
+  $plugin_configuration = new sfContentFilterPluginConfiguration($configuration, dirname(__FILE__).'/../..', 'sfContentFilterPlugin');
+}
+else
+{
+  $plugin_configuration = new sfPluginConfigurationGeneric($configuration, dirname(__FILE__).'/../..', 'sfContentFilterPlugin');
+}
