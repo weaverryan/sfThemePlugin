@@ -14,18 +14,25 @@ class sfTheme
 {
   /**
    * @var array  The configuration array
-   * @var string The absolute path to the layout for this theme
+   * @var sfThemeToolkit The toolkit instance, used to get the theme's layout path
    */
   protected
     $_config,
+    $_themeToolkit;
+
+  /**
+   * @var string The absolute path to the layout for this theme
+   */
+  protected
     $_layoutPath;
 
   /**
    * @param array $config The array of configuration for this theme
    */
-  public function __construct($config)
+  public function __construct($config, sfThemeToolkit $themeToolkit)
   {
     $this->_config = $config;
+    $this->_themeToolkit = $themeToolkit;
   }
 
   /**
@@ -50,9 +57,7 @@ class sfTheme
   protected function _findLayoutPath()
   {
     $layout = $this->getConfig('layout');
-    $sympalConfiguration = sfSympalConfiguration::getActive();
-
-    $layouts = $sympalConfiguration->getLayouts();
+    $layouts = $this->_themeToolkit->getLayouts();
     $path = array_search($layout, $layouts);
 
     if (!$path)

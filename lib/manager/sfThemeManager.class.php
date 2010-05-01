@@ -271,7 +271,7 @@ class sfThemeManager
       }
 
       $themeClass = $this->_themeClass;
-      $this->_themeObjects[$theme] = new $themeClass($this->_themes[$theme]);
+      $this->_themeObjects[$theme] = new $themeClass($this->_themes[$theme], $this->_getThemeToolkit());
     }
 
     return $this->_themeObjects[$theme];
@@ -308,5 +308,17 @@ class sfThemeManager
     }
 
     return $this->_availableThemes;
+  }
+
+  /**
+   * Returns the current sfThemeToolkit
+   * 
+   * @return sfThemeToolkit
+   */
+  protected function _getThemeToolkit()
+  {
+    return $this->_context->getConfiguration()
+      ->getPluginConfiguration('sfThemePlugin')
+      ->getThemeToolkit();
   }
 }
