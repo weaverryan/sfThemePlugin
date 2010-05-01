@@ -67,6 +67,7 @@ class sfThemeActions
   public function loadTheme($name)
   {
     $this->_action
+      ->getContext()
       ->getConfiguration()
       ->getPluginConfiguration('sfThemePlugin')
       ->getThemeManager()
@@ -98,7 +99,13 @@ class sfThemeActions
    */
   public function loadDefaultTheme()
   {
-    $this->loadTheme($this->_themeController()->getOption('default_theme'));
+    $defaultTheme = $this->_themeController->getOption('default_theme');
+    if (!$defaultTheme)
+    {
+      throw new sfException('Cannot load default theme - no default theme set.');
+    }
+    
+    $this->loadTheme($defaultTheme);
   }
 
   /**
@@ -108,6 +115,12 @@ class sfThemeActions
    */
   public function loadAdminTheme()
   {
-    $this->loadTheme($this->_themeController()->getOption('admin_theme'));
+    $adminTheme = $this->_themeController->getOption('admin_theme');
+    if (!$adminTheme)
+    {
+      throw new sfException('Cannot load admin theme - no admin theme set.');
+    }
+    
+    $this->loadTheme($adminTheme);
   }
 }
