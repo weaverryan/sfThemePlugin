@@ -10,11 +10,25 @@
 
 class sfThemeToolkit
 {
+
+  /**
+   * @var sfProjectConfiguration
+   * @var sfCache
+   */
   protected
+    $_configuration,
     $_cacheDriver;
   
   protected
     $_layouts;
+
+  /**
+   * Class constructor
+   */
+  public function __construct(sfProjectConfiguration $configuration)
+  {
+    $this->_configuration = $configuration;
+  }
 
   /**
    * Get array of all layouts in the current project
@@ -108,8 +122,10 @@ class sfThemeToolkit
    */
   protected function _generateLayoutsArray()
   {
+    $pluginPaths = $this->_configuration->getAllPluginPaths();
+    
     $layouts = array();
-    foreach ($this->getPluginPaths() as $plugin => $path)
+    foreach ($pluginPaths as $plugin => $path)
     {
       $path = $path.'/templates';
       $find = glob($path.'/*.php');
@@ -151,11 +167,11 @@ class sfThemeToolkit
    * 
    * @return sfThemeToolkit
    */
-  public static createInstance()
+  public static function createInstance(sfProjectConfiguration $configuration)
   {
     $class = sfConfig::get('app_theme_toolkit_class', 'sfThemeToolkit');
     
-    $toolkit = new $class();
+    $toolkit = new $class($configuration);
     
     // Set the cache driver if caching is enabled
     $cacheConfig = sfConfig::get('app_theme_cache');
