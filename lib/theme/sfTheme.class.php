@@ -13,27 +13,19 @@
 class sfTheme
 {
   /**
-   * @var string The name of the plugin
    * @var array  The configuration array
    * @var string The absolute path to the layout for this theme
    */
   protected
-    $_name,
     $_configuration,
     $_layoutPath;
 
   /**
    * @param array $configuration The array of configuration for this theme
    */
-  public function __construct($name, $configuration)
+  public function __construct($configuration)
   {
-    $this->_name = $name;
     $this->_configuration = $configuration;
-  }
-
-  public function getName()
-  {
-    return $this->_name;
   }
 
   public function getLayout()

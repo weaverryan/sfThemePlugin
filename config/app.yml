@@ -8,6 +8,7 @@ all:
     # Disable/Enable theming globally
     enabled:           true
     
+    theme_class:       sfTheme             # Class that represents an individual theme
     manager_class:     sfThemeManager      # Class that handles the switching of themes
     controller_class:  sfThemeController   # Class that handles which theme should be chosen
 

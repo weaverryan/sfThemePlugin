@@ -20,34 +20,41 @@ class sfThemeManager
     $_context;
 
   /**
-   * @var array An array of all of the available themes and their configurations
-   * @var array An array of theme names that are available to be switched to
+   * @var array   An array of all of the available themes and their configurations
+   * @var string  The class name to use for theme objects
    */
   protected
     $_themes,
-    $_availableThemes;
+    $_themeClass;
+
+  /*
+   * @var string The name of the current theme
+   * @var array An array of theme names that are available to be switched to
+   * @var array  $_themeObjects  Array of the instantiated sfTheme objects
+   */
+  protected
+    $_currentTheme,
+    $_availableThemes,
+    $_themeObjects;
+    
   
   /**
    * @var boolean Whether or not the current theme has been loaded
    */
   protected $_isLoaded = false;
-  
-  /**
-   * @var string $_currentTheme  The current theme name
-   * @var array  $_themeObjects  Array of the instantiated sfSympalTheme objects
-   */  
-  protected
-    $_currentThemeName,
-    $_themeObjects = array();
 
   /**
    * Class constructor
    * 
    * @param sfContext $context
+   * @param array $themes   An array of theme configurations to be used as
+   *                        the available themes to switch to
    */
-  public function __construct(sfContext $context)
+  public function __construct(sfContext $context, $themes = array(), $themClass = 'sfTheme')
   {
     $this->_context = $context;
+    $this->_themes = $themes;
+    $this->_themeClass = $themeClass;
   }
 
   /**
@@ -60,15 +67,18 @@ class sfThemeManager
    */
   public function setCurrentTheme($theme)
   {
-    if ($theme != $this->getCurrentThemeName())
+    // don't load the theme if it's already the current theme
+    if ($theme == $this->getCurrentTheme())
     {
-      // unload the current theme
-      $this->_unloadCurrentTheme();
-      
-      // set the current theme and load it
-      $this->_currentThemeName = $theme;
-      $this->_loadCurrentTheme();
+      return;
     }
+    
+    // unload the current theme
+    $this->_unloadCurrentTheme();
+    
+    // set the current theme and load it
+    $this->_currentThemeName = $theme;
+    $this->_loadCurrentTheme();
   }
 
   /**
@@ -76,7 +86,8 @@ class sfThemeManager
    */
   protected function _loadCurrentTheme()
   {
-    if ($this->isLoaded() || !$theme = $this->getCurrentTheme())
+    // don't load if we're already loaded or don't have a current theme
+    if ($this->isLoaded() || !$theme = $this->getCurrentThemeObject())
     {
       return;
     }
@@ -102,7 +113,7 @@ class sfThemeManager
    */
   protected function _unloadCurrentTheme()
   {
-    if (!$theme = $this->getCurrentTheme())
+    if (!$theme = $this->getCurrentThemeObject())
     {
       return;
     }
@@ -128,9 +139,18 @@ class sfThemeManager
     $module = $actionEntry ? $actionEntry->getModuleName() : $this->_context->getRequest()->getParameter('module');
     $action = $actionEntry ? $actionEntry->getActionName() : $this->_context->getRequest()->getParameter('action');
 
+    // Set the layout for the given module & action
     sfConfig::set('symfony.view.'.$module.'_'.$action.'_layout', $path);
-    sfConfig::set('symfony.view.sympal_default_error404_layout', $path);
-    sfConfig::set('symfony.view.sympal_default_secure_layout', $path);
+
+    // Set the layout on the 404 module & action
+    $error404Action = sfConfig::get('sf_error_404_action');
+    $error404Module = sfConfig::get('sf_error_404_module');
+    sfConfig::set('symfony.view.'.$error404Module.'_'.$error404Action.'_layout', $path);
+
+    // Set the layout on the secure module & action
+    $secureAction = sfConfig::get('sf_secure_action');
+    $secureModule = sfConfig::get('sf_secure_module');
+    sfConfig::set('symfony.view.'.$secureModule.'_'.$secureAction.'_layout', $path);
   }
 
   /**
@@ -196,7 +216,7 @@ class sfThemeManager
   /**
    * Removes the array of javascripts from the response
    */
-  public function _removeJavascripts($javascripts)
+  protected function _removeJavascripts($javascripts)
   {
     $response = $this->_context->getResponse();
     foreach ($javascripts as $javascript)
@@ -220,7 +240,7 @@ class sfThemeManager
    * 
    * @return string
    */
-  public function getCurrentThemeName()
+  public function getCurrentTheme()
   {
     return $this->_currentThemeName;
   }
@@ -228,58 +248,42 @@ class sfThemeManager
   /**
    * Returns the current theme object, if there is one
    * 
-   * @return sfSympalTheme or false if there is not current theme
+   * @return sfTheme or false if there is not current theme
    */
-  public function getCurrentTheme()
+  public function getCurrentThemeObject()
   {
-    return $this->getCurrentThemeName() ? $this->getTheme($this->getCurrentThemeName()) : false;
+    return $this->getCurrentTheme() ? $this->getThemeObject($this->getCurrentTheme()) : false;
   }
 
   /**
    * Get the theme object for a given theme name
    *
    * @param string $name 
-   * @return sfSympalTheme $theme
+   * @return sfTheme $theme
    */
-  public function getTheme($theme)
+  public function getThemeObject($theme)
   {
     if (!isset($this->_themeObjects[$theme]))
     {
-      $config = sfSympalConfig::get('themes', $theme);
-      if (!$config)
+      if (!isset($this->_themes[$theme]))
       {
-        throw new sfException(sprintf('Cannot load the "%s" theme: no configuration found.', $theme));
+        throw new sfException(sprintf('Cannot find configuration for theme "%s"', $theme));
       }
 
-      $themeClass = isset($config['theme_class']) ? $config['theme_class'] : 'sfSympalTheme';
-      unset($config['theme_class']);
-
-      $this->_themeObjects[$theme] = new $themeClass($theme, $config);
+      $themeClass = $this->_themeClass;
+      $this->_themeObjects[$theme] = new $themeClass($this->_themes[$theme]);
     }
 
     return $this->_themeObjects[$theme];
   }
 
   /**
-   * Get array of all themes that are not disabled.
+   * Get array of all themes and their configurations
    *
    * @return array $themes
    */
   public function getThemes()
   {
-    if ($this->_themes === null)
-    {
-      $themes = sfSympalConfig::get('themes', null, array());
-      foreach ($themes as $name => $theme)
-      {
-        if (isset($theme['disabled']) && $theme['disabled'] === true)
-        {
-          continue;
-        }
-        $this->_themes[$name] = $theme;
-      }
-    }
-
     return $this->_themes;
   }
 
