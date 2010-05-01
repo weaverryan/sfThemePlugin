@@ -21,11 +21,11 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
 
   /**
    * @var sfThemeManager    The manager instance for the application
-   * @var sfThemeDispatcher The dispatcher instance for the application
+   * @var sfThemeController The controller instance for the application
    */
   protected
     $_themeManager,
-    $_themeDispatcher;
+    $_themeController;
 
   /**
    * Initializes the plugin
@@ -45,10 +45,7 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
       $this->dispatcher->connect('user.method_not_found', array($themeUser, 'extend'));
 
       // extend the actions class
-      $actionObject = new sfThemeActions(
-        sfConfig::get('app_theme_default_theme'),
-        sfConfig::get('app_theme_admin_theme')
-      );
+      $actionObject = new sfThemeActions($this->getThemeController());
       $this->dispatcher->connect('component.method_not_found', array($actionObject, 'extend'));
     }
   }
@@ -87,7 +84,7 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
    */
   protected function _refreshTheme()
   {
-    $theme = $this->getThemeDispatcher()->getThemeForRequest($context);
+    $theme = $this->getThemeController()->getThemeForRequest($context);
     
     // If we found a theme we should use, set it on the theme manager
     if ($theme)
@@ -114,19 +111,18 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
   }
 
   /**
-   * Returns the theme dispatcher class, which is responsible for figuring
+   * Returns the theme controller object, which is responsible for figuring
    * out what theme should be used based on a variety of variables
    * 
-   * @return sfThemeDispatcher
+   * @return sfThemeController
    */
-  public function getThemeDispatcher()
+  public function getThemeController()
   {
-    if ($this->_themeDispatcher === null)
+    if ($this->_themeController === null)
     {
-      $class = sfConfig::get('app_theme_dispatcher_class', 'sfThemeDispatcher');
-      $this->_themeDispatcher = new $class();
+      $this->_themeController = sfThemeController::createInstance();
     }
     
-    return $this->_themeDispatcher;
+    return $this->_themeController;
   }
 }

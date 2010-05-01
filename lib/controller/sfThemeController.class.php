@@ -1,16 +1,43 @@
 <?php
 
 /**
- * Responsible for determining the correct theme for a request, module, route, etc
+ * Responsible for determining the correct theme for a given context
+ * based on request, module, routing and other variables
  * 
- * @package     sfSympalThemePlugin
+ * @package     sfhemePlugin
  * @subpackage  theme
  * @author      Ryan Weaver <ryan@thatsquality.com>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */
 
-class sfSympalThemeDispatcher
+class sfThemeController
 {
+  /**
+   * @var array
+   */
+  protected $_options;
+
+  /**
+   * Class constructor. The available options include:
+   *   * allow_changing_theme_by_url (default: true)
+   *        Whether or not a theme can be changed via a request parameter
+   * 
+   *   * theme_request_parameter_name (default: sf_theme)
+   *        The request parameter the triggers a theme change
+   * 
+   *   * default_theme (default: null)
+   *        The theme to return if no theme match is found
+   * 
+   *   * modules
+   *        A key-value array of module => theme name
+   * 
+   *   * routes
+   *        A key-value array of route => theme name
+   */
+  public function __construct($options = array())
+  {
+    $this->_options = $options;
+  }
 
   /**
    * Attempts to return the theme for the current request
@@ -80,5 +107,43 @@ class sfSympalThemeDispatcher
     {
       return $routes[$module];
     }
+  }
+
+  /**
+   * Returns the array of options
+   * 
+   * @return array
+   */
+  public function getOptions()
+  {
+    return $this->_options;
+  }
+
+  /**
+   * Returns a given option or default if the option doesn't exist
+   * 
+   * @param string $name    The name of the option
+   * @param mixed $default  The default to return if the option doesn't exist
+   * 
+   * @return mixed
+   */
+  public function getOption($name, $default = null)
+  {
+    return isset($this->_options[$name]) ? $this->_options[$name] : $default;
+  }
+
+  /**
+   * Creates a new instance of this class based on the available application configuration.
+   * 
+   * This should not be called directly - use sfThemePluginConfiguration::getThemeController() instead
+   * 
+   * @return sfThemeController
+   */
+  public function createInstance()
+  {
+    $class = sfConfig::get('app_theme_controller_class', 'sfThemeController');
+    $options = sfConfig::get('app_theme_controller_options', array());
+    
+    return new $class($options);
   }
 }

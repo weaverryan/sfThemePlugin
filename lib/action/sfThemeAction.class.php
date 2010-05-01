@@ -19,23 +19,19 @@ class sfThemeActions
   protected $_action;
 
   /**
-   * @var string
-   * @var string
+   * @var sfThemeController The theme controller instance to use
    */
   protected
-    $_defaultTheme,
-    $_adminTheme;
+    $_themeController;
 
   /**
    * Class constructor
    * 
-   * @param string $defaultTheme  The theme name that should be used as the default theme
-   * @param string $adminTheme    The theme name that should be used as the admin theme
+   * @param sfThemeController The theme controller instance
    */
-  public function __construct($defaultTheme, $adminTheme = null)
+  public function __construct(sfThemeController $themeController)
   {
-    $this->_defaultTheme = $defaultTheme;
-    $this->_adminTheme = ($adminTheme !== null) ? $adminTheme : $defaultTheme;
+    $this->_themeController = $themeController;
   }
 
   /**
@@ -102,7 +98,7 @@ class sfThemeActions
    */
   public function loadDefaultTheme()
   {
-    $this->loadTheme($this->_defaultTheme);
+    $this->loadTheme($this->_themeController()->getOption('default_theme'));
   }
 
   /**
@@ -112,6 +108,6 @@ class sfThemeActions
    */
   public function loadAdminTheme()
   {
-    $this->loadTheme($this->_adminTheme);
+    $this->loadTheme($this->_themeController()->getOption('admin_theme'));
   }
 }
