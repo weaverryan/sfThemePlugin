@@ -50,7 +50,7 @@ class sfThemeController
    */
   public function getThemeForRequest(sfContext $context)
   {
-    $event = $context->getEventDispatcher()->notifyUntil(new sfEvent($this, 'sympal.theme.set_theme_from_request', array(
+    $event = $context->getEventDispatcher()->notifyUntil(new sfEvent($this, 'theme.set_theme_from_request', array(
       'context' => $context,
     )));
     
@@ -64,7 +64,7 @@ class sfThemeController
       $user = $context->getUser();
       $request = $context->getRequest();
 
-      if ($theme = $request->getParameter(sfSympalConfig::get('theme', 'theme_request_parameter_name', 'sf_sympal_theme')))
+      if ($theme = $request->getParameter(sfSympalConfig::get('theme', 'theme_request_parameter_name', 'sf_theme')))
       {
         $user->setCurrentTheme($theme);
 
