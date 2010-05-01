@@ -1,9 +1,6 @@
 all:
   sympal_config:
 
-    admin_modules:
-      sympal_themes: ~
-
   theme:
     # Disable/Enable theming globally
     enabled:           true
