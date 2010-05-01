@@ -17,20 +17,15 @@ class sfTheme
    * @var string The absolute path to the layout for this theme
    */
   protected
-    $_configuration,
+    $_config,
     $_layoutPath;
 
   /**
-   * @param array $configuration The array of configuration for this theme
+   * @param array $config The array of configuration for this theme
    */
-  public function __construct($configuration)
+  public function __construct($config)
   {
-    $this->_configuration = $configuration;
-  }
-
-  public function getLayout()
-  {
-    return isset($this->_configuration['layout']) ? $this->_configuration['layout'] : $this->getName();
+    $this->_config = $config;
   }
 
   /**
@@ -45,31 +40,6 @@ class sfTheme
 
     return $this->_layoutPath;
   }
-
-  public function getStylesheets()
-  {
-    return isset($this->_configuration['stylesheets']) ? $this->_configuration['stylesheets'] : array($this->_findStylesheetPath());
-  }
-
-  public function getJavascripts()
-  {
-    return isset($this->_configuration['javascripts']) ? $this->_configuration['javascripts'] : array();    
-  }
-
-  public function getCallables()
-  {
-    return isset($this->_configuration['callables']) ? $this->_configuration['callables'] : array();
-  }
-
-  /**
-   * Returns the name of this plugin
-   * 
-   * @return string
-   */
-  public function __toString()
-  {
-    return $this->_configuration->getName();
-  }
   
   /**
    * Calculates the location of the layout, which could live in several locations.
@@ -79,7 +49,7 @@ class sfTheme
    */
   protected function _findLayoutPath()
   {
-    $layout = $this->getLayout();
+    $layout = $this->getConfig('layout');
     $sympalConfiguration = sfSympalConfiguration::getActive();
 
     $layouts = $sympalConfiguration->getLayouts();
@@ -102,39 +72,24 @@ class sfTheme
   }
 
   /**
-   * If no stylesheets are defined, this returns some default css to
-   * load automatically.
+   * Returns a given config value or default if the config doesn't exist
    * 
-   * The css will be THEME_NAME.css, and can live in a variety of dirs
+   * You can also return all of the config by not passing any arguments
    * 
-   * @TODO Consider removing this idea or part of it - this feels magical.
+   * @param string $name    The name of the config
+   * @param mixed $default  The default to return if the config doesn't exist
+   * 
+   * @return mixed
    */
-  protected function _findStylesheetPath()
+  public function getConfig($name = null, $default = null)
   {
-    $name = $this->getName();
-    if (strpos($this->getLayoutPath(), 'sfSympalPlugin/templates') !== false)
+    if ($name === null)
     {
-      return '/sfSympalPlugin/css/' . $name . '.css';
+      return $this->_config;
     }
     else
     {
-      if (is_readable(sfConfig::get('sf_web_dir').'/css/'.$name.'.css'))
-      {
-        return $name;
-      }
-      else
-      {
-        $configuration = sfContext::getInstance()->getConfiguration();
-        $pluginPaths = $configuration->getAllPluginPaths();
-
-        foreach ($pluginPaths as $plugin => $path)
-        {
-          if (file_exists($path.'/web/css/'.$name.'.css'))
-          {
-            return '/'.$plugin.'/css/'.$name.'.css';
-          }
-        }
-      }
+      return isset($this->_config[$name]) ? $this->_config[$name] : $default;
     }
   }
 }
