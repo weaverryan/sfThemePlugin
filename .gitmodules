@@ -1,3 +1,0 @@
-[submodule "test/fixtures/project/plugins/sfSympalPlugin"]
-	path = test/fixtures/project/plugins/sfSympalPlugin
-	url = git://github.com/weaverryan/sympal.git
