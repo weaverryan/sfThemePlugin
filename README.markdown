@@ -170,6 +170,17 @@ In your application configuration file (`apps/app_name/config/app_nameConfigurat
       return false;
     }
 
+Web Debug Panel
+---------------
+
+This plugin comes with a web debug panel that allows you to see your themes
+and switch in between theme:
+
+![The web debug panel icon](http://github.com/weaverryan/sfThemePlugin/raw/master/docs/debug_toolbar1.png)
+
+![The web debug panel expanded](http://github.com/weaverryan/sfThemePlugin/raw/master/docs/debug_toolbar2.png)
+
+
 The Fine Details
 ----------------
 
