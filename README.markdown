@@ -22,6 +22,34 @@ Using the plugin couldn't be easier and consists of two steps
  * Create a theme or themes
  * Set each theme globally or exactly where you need it
 
+Installation
+------------
+
+With git:
+
+    git submodule add git://github.com/weaverryan/sfThemePlugin.git plugins/sfThemePlugin
+    git submodule init
+    git submodule update
+
+With subversion
+
+    svn propedit svn:externals plugins
+    
+    // In the editor, add the following entry and then save
+    sfThemePlugin https://svn.github.com/weaverryan/sfThemePlugin.git
+    
+    svn up
+
+In your `config/ProjectConfiguration.class.php` file, make sure you have
+the plugin enabled.
+
+    $this->enablePlugins('sfThemePlugin');
+
+Finally, run the `publish:assets` task which will create a symbolic link
+from the plugin into your web directory:
+
+    ./symfony plugin:publish-assets
+
 Creating themes
 ---------------
 

@@ -11,7 +11,7 @@ class sfThemeWebDebugPanel extends sfWebDebugPanel
 {
   public function getTitle()
   {
-    return 'img-theme';
+    return '<img src="/sfThemePlugin/images/theme.png" alt="Theme Management" height="16" width="16" /> themes';
   }
 
   public function getPanelTitle()
