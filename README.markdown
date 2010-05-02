@@ -142,6 +142,14 @@ In your application configuration file (`apps/app_name/config/app_nameConfigurat
       return false;
     }
 
+The Fine Details
+----------------
+
+This plugin was taken from [sympal CMF](http://www.sympalphp.org) and was
+developed by both Jon Wage and Ryan Weaver.
+
+If you have questions, comments or anything else, email me at ryan [at] thatsquality.com
+
 
 
 
