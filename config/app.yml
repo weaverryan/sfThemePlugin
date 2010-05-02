@@ -39,7 +39,5 @@ all:
       #   layout:   my_theme               # The name of the layout file to use
       #   javascripts: [my_file.js]        # Array of javascripts for this theme
       #   stylesheets: [theme_styles.css]  # Array of stylesheets for this theme
-      #   callables:
-      #     - [sfSympalToolkit, useJQuery]
       #   enabled: false                   # Enable/disable the theme [default=true]
       #   available: false                 # Allow switching to the theme [default=true]
