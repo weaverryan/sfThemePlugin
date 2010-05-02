@@ -174,7 +174,7 @@ Web Debug Panel
 ---------------
 
 This plugin comes with a web debug panel that allows you to see your themes
-and switch in between theme:
+and switch between them:
 
 ![The web debug panel icon](http://github.com/weaverryan/sfThemePlugin/raw/master/docs/debug_toolbar1.png)
 
