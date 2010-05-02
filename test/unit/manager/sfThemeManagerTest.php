@@ -4,7 +4,7 @@
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 require_once(dirname(__FILE__).'/../../bootstrap/functional.php');
 
-$t = new lime_test(28);
+$t = new lime_test(30);
 
 
 $t->info('1 - Test some basics of getting themes, theme objects');
@@ -145,6 +145,29 @@ $t->info('2 - Set some themes and see what happens');
       array(),
       'The old theme\'s js was removed, the javascripts array is empty since this theme has none'
     );
+  
+  $t->info('  2.6 - Add a stylesheet with custom options');
+    $context->getResponse()->removeStylesheet('non_theme_css'); // remove the extra css
+  
+    // This is how the css is loaded in if using the alternate syntax in app.yml
+    $cssOptionThemeconfig = $themeConfig;
+    $cssOptionThemeconfig['stylesheets'] = array(
+      array('main.css' => array('media' => 'print', 'position' => 'first'))
+    );
+    $manager->addTheme('css_theme', $cssOptionThemeconfig);
+    $manager->setCurrentTheme('css_theme');
+    
+    $t->is(
+      $context->getResponse()->getStylesheets(),
+      array('main.css' => array('media' => 'print')),
+      'The stylesheets media option was translated correctly'
+    );
+    $t->is(
+      $context->getResponse()->getStylesheets(sfWebResponse::FIRST),
+      array('main.css' => array('media' => 'print')),
+      'The stylesheet was added to the "first" position'
+    );
+    
 
 $t->info('3 - Test the createInstance() method');
   

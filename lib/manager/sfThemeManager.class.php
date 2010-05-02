@@ -200,11 +200,7 @@ class sfThemeManager
    */
   protected function _addStylesheets($stylesheets)
   {
-    $response = $this->_context->getResponse();
-    foreach ($stylesheets as $stylesheet)
-    {
-      $response->addStylesheet($stylesheet, 'last');
-    }
+    $this->_addAssets('Stylesheet', $stylesheets);
   }
 
   /**
@@ -214,10 +210,46 @@ class sfThemeManager
    */
   protected function _addJavascripts($javascripts)
   {
+    $this->_addAssets('Javascript', $javascripts);
+  }
+
+  /**
+   * Runs a series of add$Type statements by parsing the array of assets
+   * and figuring out the correct options.
+   * 
+   * The assets array comes straight from app.yml, which has the same
+   * format available for view.yml assets
+   * 
+   * The majority of this function taken from sfViewConfigHandler::addAssets()
+   * 
+   * @param string $type Either Stylesheet or Javascript
+   */
+  protected function _addAssets($type, $assets)
+  {
+    $method = 'add'.$type;
     $response = $this->_context->getResponse();
-    foreach ($javascripts as $javascript)
+
+    foreach ((array) $assets as $asset)
     {
-      $response->addJavascript($javascript);
+      $position = 'last'; // default position to last
+      if (is_array($asset))
+      {
+        $key = key($asset);
+        $options = $asset[$key];
+        if (isset($options['position']))
+        {
+          $position = $options['position'];
+          unset($options['position']);
+        }
+      }
+      else
+      {
+        $key = $asset;
+        $options = array();
+      }
+
+      // Add the asset to the response
+      $response->$method($key, $position, $options);
     }
   }
 
