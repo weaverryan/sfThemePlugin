@@ -88,7 +88,7 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
   {
     $theme = $this->getThemeController()->getThemeForRequest(
       $this->_context,
-      array_keys($this->getThemeManager()->getThemes())
+      array_keys($this->getThemeManager()->getAvailableThemes())
     );
     
     // If we found a theme we should use, set it on the theme manager
