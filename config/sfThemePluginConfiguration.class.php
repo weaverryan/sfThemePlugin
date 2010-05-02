@@ -49,6 +49,9 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
       // extend the actions class
       $actionObject = new sfThemeActions($this->getThemeController());
       $this->dispatcher->connect('component.method_not_found', array($actionObject, 'listenComponentMethodNotFound'));
+
+      // register the web debug panel
+      $this->dispatcher->connect('debug.web.load_panels', array($this, 'listenDebugWebLoadPanels'));
     }
   }
   
@@ -142,5 +145,14 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
     }
     
     return $this->_themeToolkit;
+  }
+
+  // Listens on the debug.web.load_panels event, adds the web debug panel
+  public function listenDebugWebLoadPanels(sfEvent $event)
+  {
+    if (sfConfig::get('app_theme_web_debug', true))
+    {
+      $event->getSubject()->setPanel('themes', new sfThemeWebDebugPanel($event->getSubject()));
+    }
   }
 }

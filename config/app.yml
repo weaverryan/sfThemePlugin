@@ -2,6 +2,9 @@ all:
   theme:
     # Disable/Enable theming globally
     enabled:           true
+    
+    # Turn on or off the web debug toolbar
+    web_debug:         true
 
     # Options to help the correct theme to be chosen
     controller_options:
