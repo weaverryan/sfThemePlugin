@@ -1,3 +1,4 @@
+# Routes for the extended Actions test
 custom_theme:
   url:   /themes/:theme
   param: { module: test, action: customTheme }
@@ -6,6 +7,33 @@ default_theme:
   url:   /set_default_theme
   param: { module: test, action: defaultTheme }
 
+
+# Routes for the controller test
+controller_default_theme:
+  url:   /controller/default_theme
+  param: { module: controller, action: defaultTheme }
+controller_explicit_test_theme:
+  url:   /controller/explicit_test_theme
+  param: { module: controller, action: explicitTestTheme }
+
+controller_test_theme_forward_default_theme:
+  url:   /controller/test_theme_forward_default_theme
+  param: { module: controller, action: testThemeForwardDefaultTheme }
+controller_default_theme_forward_test_theme:
+  url:   /controller/default_theme_forward_test_theme
+  param: { module: controller, action: defaultThemeForwardTestTheme }
+
+controller_event_listener:
+  url:   /controller/event_listener
+  param: { module: controller, action: eventListener }
+
+test_theme_module_index:
+  url:   /test_theme_module/index
+  param: { module: test_theme_module, action: index }
+
+test_theme_route:
+  url:   /controller/test_theme_route
+  param: { module: controller, action: defaultTheme }
 
 # Keep this - we rely on it to match for a few unit tests that are context-dependent
 homepage:

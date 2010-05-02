@@ -9,6 +9,7 @@
     <?php include_javascripts() ?>
   </head>
   <body>
+    <h1>No theme</h1>
     <?php echo $sf_content ?>
   </body>
 </html>

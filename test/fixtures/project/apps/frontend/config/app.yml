@@ -8,6 +8,12 @@ all:
     
     controller_options:
       default_theme:    app_test
+      
+      modules:
+        test_theme_module: test_theme
+      
+      routes:
+        test_theme_route:  test_theme
     
     themes:
       disabled_theme:
