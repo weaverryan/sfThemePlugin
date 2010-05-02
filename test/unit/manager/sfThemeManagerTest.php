@@ -4,7 +4,7 @@
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 require_once(dirname(__FILE__).'/../../bootstrap/functional.php');
 
-$t = new lime_test(10);
+$t = new lime_test(23);
 
 
 $t->info('1 - Test some basics of getting themes, theme objects');
@@ -139,10 +139,8 @@ $t->info('2 - Set some themes and see what happens');
       array(),
       'The old theme\'s js was removed, the javascripts array is empty since this theme has none'
     );
-  
 
-
-die;
+/*
 $t->info('1 - Test getThemes(), getAvailableThemes()');
 $themes = $manager->getThemes(); 
 $t->is(isset($themes['unavailable_theme']), true, '->getThemes() includes unavailable_theme (but enabled) theme'); 
@@ -161,3 +159,4 @@ catch (Exception $e)
 {
   $t->pass('Exception thrown');
 }
+*/
