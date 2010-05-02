@@ -70,17 +70,27 @@ class sfThemeManager
     // Make sure the theme object exists, this will trigger an exception if it does not
     $this->getThemeObject($theme);
     
-    // don't load the theme if it's already the current theme
-    if ($theme == $this->getCurrentTheme())
+    /*
+     * Don't load the theme if it's already the current theme
+     * 
+     * But, ignore this in the test environment. This is because the layout
+     * is set using some global (sfConfig) variables and the testing context
+     * and the browser context get mixed up.
+     * 
+     * I don't understand it correctly, but it definitely has to do with the
+     * static context - everywhere else I make sure to keep the two context's
+     * strictly separate (i.e. not using sfContext::getInstance)
+     */ 
+    if ($theme == $this->getCurrentTheme() && sfConfig::get('sf_environment') != 'test')
     {
       return;
     }
-    
+
     // unload the current theme
     $this->_unloadCurrentTheme();
     
     // set the current theme and load it
-    $this->_currentThemeName = $theme;
+    $this->_currentTheme = $theme;
     $this->_loadCurrentTheme();
   }
 
@@ -262,7 +272,7 @@ class sfThemeManager
    */
   public function getCurrentTheme()
   {
-    return $this->_currentThemeName;
+    return $this->_currentTheme;
   }
 
   /**
