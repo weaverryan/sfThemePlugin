@@ -4,7 +4,7 @@
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 require_once(dirname(__FILE__).'/../../bootstrap/functional.php');
 
-$t = new lime_test(23);
+$t = new lime_test(28);
 
 
 $t->info('1 - Test some basics of getting themes, theme objects');
@@ -140,23 +140,20 @@ $t->info('2 - Set some themes and see what happens');
       'The old theme\'s js was removed, the javascripts array is empty since this theme has none'
     );
 
-/*
-$t->info('1 - Test getThemes(), getAvailableThemes()');
-$themes = $manager->getThemes(); 
-$t->is(isset($themes['unavailable_theme']), true, '->getThemes() includes unavailable_theme (but enabled) theme'); 
-$t->is(count($themes), 6, '->getThemes() should return 6 themes (3 from main plugin, 1 from other plugin, 2 non-disabled from the project)');
-
-$availableThemes = $manager->getAvailableThemes(); 
-$t->is(isset($availableThemes['unavailable_theme']), false, '->getAvailableThemes() does not include unavailable_theme theme'); 
-$t->is(count($availableThemes), 5, '->getAvailableThemes() returns 4 themes (3 from main plugin, 1 from other plugin, 1 from app)');
-
-$theme = $manager->getTheme('app_test');
-try {
-  $theme = $manager->getTheme('test2');
-  $t->fail('Should have thrown exception');
-}
-catch (Exception $e)
-{
-  $t->pass('Exception thrown');
-}
-*/
+$t->info('3 - Test the createInstance() method');
+  
+  $manager = sfThemeManager::createInstance($context);
+  
+  $t->is(get_class($manager), 'sfThemeTestManager', 'The class of the created object is sfThemeTestManager, as set in app.yml');
+  $t->is(array_keys($manager->getThemes()), array(
+    'test_theme',
+    'unavailable_theme',
+    'app_test',
+  ), 'All the themes loaded correctly from app.yml - the disabled theme is NOT loaded');
+  
+  $t->is(get_class($manager->getThemeObject('app_test')), 'sfTestTheme', 'The theme objects have class sfTestTheme from app.yml');
+  
+  $t->info('  3.1 - Test ->getAvailableThemes() while I\'m here');
+  $availableThemes = $manager->getAvailableThemes(); 
+  $t->is(isset($availableThemes['unavailable_theme']), false, '->getAvailableThemes() does not include unavailable_theme theme'); 
+  $t->is(count($availableThemes), 2, '->getAvailableThemes() returns 2 themes (1 from other plugin, 1 from app)');

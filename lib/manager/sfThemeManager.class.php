@@ -394,6 +394,15 @@ class sfThemeManager
     $class = sfConfig::get('app_theme_manager_class', 'sfThemeManager');
     $themes = sfConfig::get('app_theme_themes', array());
     $themeClass = sfConfig::get('app_theme_theme_class', 'sfTheme');
+
+    // Don't load themes that aren't enabled
+    foreach ($themes as $key => $themeConfig)
+    {
+      if (isset($themeConfig['enabled']) && !$themeConfig['enabled'])
+      {
+        unset($themes[$key]);
+      }
+    }
     
     return new $class($context, $themes, $themeClass);
   }

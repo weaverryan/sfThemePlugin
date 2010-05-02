@@ -11,13 +11,12 @@ all:
     
     themes:
       disabled_theme:
-        disabled:    true
+        enabled:     false
 
       unavailable_theme:
-        disabled:    false
+        enaled:      true
         available:   false
 
       app_test:
         available: true
-        disabled:  false
         layout:    app_test_layout
