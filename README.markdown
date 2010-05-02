@@ -110,8 +110,8 @@ By default (this can be turned off), you can switch to any available theme
 by appending `?sf_theme=theme_name` to the end of any url.
 
 This will set a user attribute so that you can browse your entire site
-with this theme. To unset the user attribute, simply append `?sf_theme=`
-to the end of your url (without any theme name).
+with this theme. To clar the user attribute, simply append `?sf_theme=clear`
+to the end of your url.
 
 ### Advanced theming using an event
 
