@@ -2,13 +2,8 @@ all:
   theme:
     # Disable/Enable theming globally
     enabled:           true
-    
-    theme_class:       sfTheme             # Class that represents an individual theme
-    manager_class:     sfThemeManager      # Class that handles the switching of themes
-    controller_class:  sfThemeController   # Class that handles which theme should be chosen
-    toolkit_class:     sfThemeToolkit      # class that handles a few behind-the-scenes tasks
 
-    # Options for the controller - to help it choose the correct theme
+    # Options to help the correct theme to be chosen
     controller_options:
       default_theme:     ~                 # Configure the default theme to render
       admin_theme:       ~                 # Configure the theme to render for "admin" modules
@@ -24,6 +19,12 @@ all:
       allow_changing_theme_by_url: true
       theme_request_parameter_name: sf_theme
 
+    theme_class:       sfTheme             # Class that represents an individual theme
+    manager_class:     sfThemeManager      # Class that handles the switching of themes
+    controller_class:  sfThemeController   # Class that handles which theme should be chosen
+    toolkit_class:     sfThemeToolkit      # class that handles a few behind-the-scenes tasks
+
+    # Caching is used to cache the paths to all the layouts in an app
     cache:
       enabled:  true
       class:    sfFileCache
@@ -32,14 +33,10 @@ all:
 
     themes:
       # my_theme:
-      #   available: false       # Don't show in the list of available themes to switch to
-      #   disabled: false
-      #   layout:   my_theme
-      #   admin_generator_class: sfSympalDoctrineGenerator
-      #   admin_generator_theme: sympal_admin
-      #   javascripts:
-      #     - /sfSympalPlugin/js/jQuery.cookie.js
-      #   stylesheets:
-      #     - /sfSympalPlugin/fancybox/jquery.fancybox.css
+      #   layout:   my_theme               # The name of the layout file to use
+      #   javascripts: [my_file.js]        # Array of javascripts for this theme
+      #   stylesheets: [theme_styles.css]  # Array of stylesheets for this theme
       #   callables:
       #     - [sfSympalToolkit, useJQuery]
+      #   enabled: false                   # Enable/disable the theme [default=true]
+      #   available: false                 # Allow switching to the theme [default=true]
