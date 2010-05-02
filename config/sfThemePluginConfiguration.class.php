@@ -74,7 +74,7 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
    * @param sfEvent $event The controller.change_action event object
    */
   public function listenControllerChangeAction(sfEvent $event)
-  {    
+  {
     // Refresh the theme from the context
     $this->_refreshTheme();
   }
@@ -86,7 +86,10 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
    */
   protected function _refreshTheme()
   {
-    $theme = $this->getThemeController()->getThemeForRequest($this->_context);
+    $theme = $this->getThemeController()->getThemeForRequest(
+      $this->_context,
+      array_keys($this->getThemeManager()->getThemes())
+    );
     
     // If we found a theme we should use, set it on the theme manager
     if ($theme)

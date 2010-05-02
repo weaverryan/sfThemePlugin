@@ -46,9 +46,12 @@ class sfThemeController
    * anyone the opportunity to determine the theme. If this event is not
    * handled, we continue with some default rules for setting themes.
    * 
+   * @param sfContext $context
+   * @param array An array of valid themes, to be used for user-entered themes
+   * 
    * @return string The theme (defaults to the default theme)
    */
-  public function getThemeForRequest(sfContext $context)
+  public function getThemeForRequest(sfContext $context, $validThemes)
   {
     $event = $context->getEventDispatcher()->notifyUntil(new sfEvent($this, 'theme.set_theme_from_request', array(
       'context' => $context,
@@ -66,9 +69,18 @@ class sfThemeController
 
       if ($theme = $request->getParameter($this->getOption('theme_request_parameter_name', 'sf_theme')))
       {
-        $user->setCurrentTheme($theme);
+        // make sure the theme is valid
+        if (in_array($theme, $validThemes))
+        {
+          $user->setCurrentTheme($theme);
 
-        return $theme;
+          return $theme;
+        }
+        else
+        {
+          // unset the user attribute
+          $user->setCurrentTheme(false);
+        }
       }
 
       if ($theme = $user->getCurrentTheme())
@@ -103,9 +115,9 @@ class sfThemeController
     }
     
     $routes = $this->getOption('routes', array());
-    if (array_key_exists($module, $routes))
+    if (array_key_exists($route, $routes))
     {
-      return $routes[$module];
+      return $routes[$route];
     }
   }
 
