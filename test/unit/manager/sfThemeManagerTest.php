@@ -107,12 +107,18 @@ $t->info('2 - Set some themes and see what happens');
     // This isn't something we'd normally do, just a clever way to see what's going on behind the scenes.
     $context->getResponse()->removeStylesheet('main');
 
+    /*
+     * To test, we need to "fake" switching outside of the test environment
+     * to get around a hack in the Manager class to help in the testing env
+     */
+    sfConfig::set('sf_environment', 'dev');
     $manager->setCurrentTheme('good_theme');
     $t->is(
       $context->getResponse()->getStylesheets(),
       array(),
       'The theme was not re-set, which we can see because the stylesheet was not replaced'
     );
+    sfConfig::set('sf_environment', 'test');
 
 
   $t->info('  2.5 - Make a different theme current, see that everything switches correctly');
