@@ -1,0 +1,12 @@
+all:
+  theme:
+    # Define valid themes, but disable them globally
+    enabled:   false
+    
+    controller_options:
+      default_theme:    app_test_layout
+    
+    themes:
+      app_test:
+        available: true
+        layout:    app_test_layout
