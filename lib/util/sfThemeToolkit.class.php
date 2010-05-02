@@ -40,14 +40,14 @@ class sfThemeToolkit
     if ($this->_layouts === null)
     {
       // check if it's in the cache
-      if ($layouts = $this->getCache('configuration.layouts'))
+      if ($layouts = $this->getCache('theme.configuration.layouts'))
       {
         $this->_layouts = unserialize($layouts);
       }
       else
       {
         $this->_layouts = $this->_generateLayoutsArray();
-        $this->setCache('configuration.layouts', serialize($this->_layouts));
+        $this->setCache('theme.configuration.layouts', serialize($this->_layouts));
       }
     }
 
@@ -89,6 +89,11 @@ class sfThemeToolkit
   public function setCacheDriver(sfCache $cacheDriver)
   {
     $this->_cacheDriver = $cacheDriver;
+  }
+
+  public function getCacheDriver()
+  {
+    return $this->_cacheDriver;
   }
 
   /**
