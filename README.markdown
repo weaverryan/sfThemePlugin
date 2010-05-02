@@ -68,6 +68,9 @@ The layout can exist in the `templates` directory of your application or in
 the `templates` directory of any plugin. This means that your entire
 theme can live inside a plugin and be repackaged for other projects.
 
+A few other, optional, configuration variables exist for a theme. See the
+`config/app.yml` packaged with the plugin for full examples.
+
 Setting Themes
 --------------
 
@@ -180,6 +183,12 @@ and switch between them:
 
 ![The web debug panel expanded](http://github.com/weaverryan/sfThemePlugin/raw/master/docs/debug_toolbar2.png)
 
+Advanced Options
+----------------
+
+The `app.yml` file packaged with the plugin shows several other configuration
+options for the plugin. These are documented in the `app.yml` file itself
+and won't normally need to be modified.
 
 The Fine Details
 ----------------
