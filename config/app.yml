@@ -6,6 +6,7 @@ all:
     theme_class:       sfTheme             # Class that represents an individual theme
     manager_class:     sfThemeManager      # Class that handles the switching of themes
     controller_class:  sfThemeController   # Class that handles which theme should be chosen
+    toolkit_class:     sfThemeToolkit      # class that handles a few behind-the-scenes tasks
 
     # Options for the controller - to help it choose the correct theme
     controller_options:
