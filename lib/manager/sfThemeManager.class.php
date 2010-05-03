@@ -36,6 +36,19 @@ class sfThemeManager
     $_currentTheme,
     $_availableThemes,
     $_themeObjects;
+
+  /**
+   * Array keeping track of the current js and css set on the response
+   * for the current theme
+   * 
+   * This is important because the stylesheets and javascripts arrays on
+   * a theme might have the alternate formatting (arrays), and we don't
+   * want to have to process that again just to unset the assets when
+   * switching themes
+   */
+  protected
+    $_currentJavascripts = array(),
+    $_currentStylesheets = array();
     
   
   /**
@@ -136,10 +149,10 @@ class sfThemeManager
     $this->_changeLayout($this->_getLayoutPath($theme->getLayout()));
 
     // Add theme stylesheets to response
-    $this->_addStylesheets($theme->getStylesheets());
+    $this->_currentStylesheets = $this->_addStylesheets($theme->getStylesheets());
 
     // Add theme javascripts to response
-    $this->_addJavascripts($theme->getJavascripts());
+    $this->_currentJavascripts = $this->_addJavascripts($theme->getJavascripts());
 
     // Invoke any callables
     $this->_invokeCallables($theme->getCallables());
@@ -159,10 +172,12 @@ class sfThemeManager
     }
 
     // Remove theme stylesheets
-    $this->_removeStylesheets($theme->getStylesheets());
+    $this->_removeStylesheets($this->_currentStylesheets);
+    $this->_currentStylesheets = array();
 
     // Remove theme javascripts
-    $this->_removeJavascripts($theme->getJavascripts());
+    $this->_removeJavascripts($this->_currentJavascripts);
+    $this->_currentJavascripts = array();
 
     $this->_isLoaded = false;
   }
@@ -197,20 +212,22 @@ class sfThemeManager
    * Adds the given stylesheets to the response object
    * 
    * @param array $stylesheets The stylesheets to add to the response
+   * @return an array of the stylesheets files just added
    */
   protected function _addStylesheets($stylesheets)
   {
-    $this->_addAssets('Stylesheet', $stylesheets);
+    return $this->_addAssets('Stylesheet', $stylesheets);
   }
 
   /**
    * Adds the given javascripts to the response object
    * 
    * @param array $javascripts The javascripts to add to the response
+   * @return an array of the javascripts files just added
    */
   protected function _addJavascripts($javascripts)
   {
-    $this->_addAssets('Javascript', $javascripts);
+    return $this->_addAssets('Javascript', $javascripts);
   }
 
   /**
@@ -229,6 +246,7 @@ class sfThemeManager
     $method = 'add'.$type;
     $response = $this->_context->getResponse();
 
+    $processedAssets = array();
     foreach ((array) $assets as $asset)
     {
       $position = 'last'; // default position to last
@@ -248,9 +266,26 @@ class sfThemeManager
         $options = array();
       }
 
+      // Keep a full array of the assets and their options
+      $processedAssets[] = array('file' => $key, 'position' => $position, 'options' => $options);
+      
+      // Keep a simple array of just the assets
+      $assetFiles[] = $key;
       // Add the asset to the response
-      $response->$method($key, $position, $options);
     }
+
+    // Add the assets to the response
+    $assetFiles = array();
+    foreach ($processedAssets as $asset)
+    {
+      // Add the asset to the response
+      $response->$method($asset['file'], $asset['position'], $asset['options']);
+      
+      // Record a simple array of the filenames, for returning
+      $assetFiles[] = $asset['file'];
+    }
+    
+    return $assetFiles;
   }
 
   /**
