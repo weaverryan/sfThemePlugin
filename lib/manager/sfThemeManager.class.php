@@ -274,6 +274,12 @@ class sfThemeManager
       // Add the asset to the response
     }
 
+    // Throw an event to allow for paths to be filtered at a low level
+    $processedAssets = $this->_context->getEventDispatcher()->filter(
+      new sfEvent($this, 'theme.filter_asset_paths'),
+      $processedAssets
+    )->getReturnValue();
+
     // Add the assets to the response
     $assetFiles = array();
     foreach ($processedAssets as $asset)

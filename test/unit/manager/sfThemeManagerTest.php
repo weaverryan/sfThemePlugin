@@ -4,7 +4,7 @@
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 require_once(dirname(__FILE__).'/../../bootstrap/functional.php');
 
-$t = new lime_test(30);
+$t = new lime_test(31);
 
 
 $t->info('1 - Test some basics of getting themes, theme objects');
@@ -167,9 +167,34 @@ $t->info('2 - Set some themes and see what happens');
       array('main.css' => array('media' => 'print')),
       'The stylesheet was added to the "first" position'
     );
-    
 
-$t->info('3 - Test the createInstance() method');
+
+$t->info('3 - Test the theme.filter_asset_paths method which allows rewriting of asset paths');
+
+  $context->getEventDispatcher()->connect('theme.filter_asset_paths', 'rewriteAssets');
+  function rewriteAssets(sfEvent $event, $assets)
+  {
+    foreach ($assets as $key => $asset)
+    {
+      $assets[$key]['file'] = 'changed';
+      $assets[$key]['options'] = array('media' => 'print');
+    }
+    
+    return $assets;
+  }
+  
+  $t->info('  3.1 - Set the "good_theme" theme, should bring in main css');
+  $manager->setCurrentTheme('good_theme');
+  $t->is(
+    $context->getResponse()->getStylesheets(),
+    array('changed' => array('media' => 'print')),
+    'The main css stylesheet was changed to "changed" and an option was added'
+  );
+
+  $context->getEventDispatcher()->disconnect('theme.filter_asset_paths', 'rewriteAssets');
+
+
+$t->info('4 - Test the createInstance() method');
   
   $manager = sfThemeManager::createInstance($context);
   
@@ -182,7 +207,7 @@ $t->info('3 - Test the createInstance() method');
   
   $t->is(get_class($manager->getThemeObject('app_test')), 'sfTestTheme', 'The theme objects have class sfTestTheme from app.yml');
   
-  $t->info('  3.1 - Test ->getAvailableThemes() while I\'m here');
+  $t->info('  4.1 - Test ->getAvailableThemes() while I\'m here');
   $availableThemes = $manager->getAvailableThemes(); 
   $t->is(isset($availableThemes['unavailable_theme']), false, '->getAvailableThemes() does not include unavailable_theme theme'); 
   $t->is(count($availableThemes), 2, '->getAvailableThemes() returns 2 themes (1 from other plugin, 1 from app)');
