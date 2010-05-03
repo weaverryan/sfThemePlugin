@@ -34,7 +34,7 @@ all:
       options:
         cache_dir:  <?php echo sfConfig::get('sf_app_cache_dir') ?>/theme
 
-    themes:
+    themes: []
       # my_theme:
       #   layout:   my_theme               # The name of the layout file to use
       #   javascripts: [my_file.js]        # Array of javascripts for this theme
