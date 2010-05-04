@@ -72,6 +72,8 @@ class sfThemeWebDebugPanel extends sfWebDebugPanel
     }
     $content .= $panel;
     
+    $content .= '</table>';
+    
     return $content;
   }
 
