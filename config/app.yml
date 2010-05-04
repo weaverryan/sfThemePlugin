@@ -8,8 +8,8 @@ all:
 
     # Options to help the correct theme to be chosen
     controller_options:
-      default_theme:     ~                 # Configure the default theme to render
-      admin_theme:       ~                 # Configure the theme to render for "admin" modules
+      # default_theme:     ~                 # Configure the default theme to render
+      # admin_theme:       ~                 # Configure the theme to render for "admin" modules
       
       modules:    []                       # Specify an array of modules and the theme that each should use
         # my_module:     theme_name
