@@ -190,6 +190,24 @@ The `app.yml` file packaged with the plugin shows several other configuration
 options for the plugin. These are documented in the `app.yml` file itself
 and won't normally need to be modified.
 
+Testing
+-------
+
+In your functional tests, you can easily test so a particular module has
+the correct theme. First, notify your `sfTestFunctional` instance of the
+theme tester:
+
+    $browser = new sfTestFunctional(new sfBrowser());
+    $browser->setTester('theme', 'sfTesterTheme');
+
+To use it, simply do the following:
+
+    $browser->get('/some/url')
+
+    ->with('theme')->begin()
+      ->isCurrentTheme('wordpress_default')
+    ->end();
+
 The Fine Details
 ----------------
 
