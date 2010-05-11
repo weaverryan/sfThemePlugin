@@ -11,6 +11,8 @@ all:
       
       modules:
         test_theme_module: test_theme
+        
+        manager:           test_theme
       
       routes:
         test_theme_route:  test_theme

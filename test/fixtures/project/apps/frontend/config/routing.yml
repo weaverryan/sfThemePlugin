@@ -35,6 +35,11 @@ test_theme_route:
   url:   /controller/test_theme_route
   param: { module: controller, action: defaultTheme }
 
+# Routes for the manager test
+manager_forward_to_same_theme:
+  url:   /manager/forward_to_same_theme
+  param: { module: manager, action: forwardToSameTheme }
+
 # Keep this - we rely on it to match for a few unit tests that are context-dependent
 homepage:
   url:   /

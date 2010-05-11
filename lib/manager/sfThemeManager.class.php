@@ -86,16 +86,17 @@ class sfThemeManager
     /*
      * Don't load the theme if it's already the current theme
      * 
-     * But, ignore this in the test environment. This is because the layout
-     * is set using some global (sfConfig) variables and the testing context
-     * and the browser context get mixed up.
-     * 
-     * I don't understand it correctly, but it definitely has to do with the
-     * static context - everywhere else I make sure to keep the two context's
-     * strictly separate (i.e. not using sfContext::getInstance)
-     */ 
-    if ($theme == $this->getCurrentTheme() && sfConfig::get('sf_environment') != 'test')
+     */
+    if ($theme == $this->getCurrentTheme())
     {
+      /*
+       * We don't want to unload and reload the theme, if the theme hasn't
+       * changed, but we do have to cover for the case where the action
+       * is forwarded from one action to another with the same theme. In
+       * that case, we still need to set the right layout for the new action
+       */
+      $this->_changeLayout($this->_getLayoutPath($this->getCurrentThemeObject()->getLayout()));
+      
       return;
     }
 
