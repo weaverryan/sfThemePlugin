@@ -1,9 +1,9 @@
 <?php
 /**
  * Keeps track of the current theme and manages the changing of themes
- * 
+ *
  * There should be one theme manager per application configuration
- * 
+ *
  * @package     sfThemePlugin
  * @subpackage  theme
  * @author      Ryan Weaver <ryan@thatsquality.com>
@@ -40,7 +40,7 @@ class sfThemeManager
   /**
    * Array keeping track of the current js and css set on the response
    * for the current theme
-   * 
+   *
    * This is important because the stylesheets and javascripts arrays on
    * a theme might have the alternate formatting (arrays), and we don't
    * want to have to process that again just to unset the assets when
@@ -49,8 +49,7 @@ class sfThemeManager
   protected
     $_currentJavascripts = array(),
     $_currentStylesheets = array();
-    
-  
+
   /**
    * @var boolean Whether or not the current theme has been loaded
    */
@@ -58,7 +57,7 @@ class sfThemeManager
 
   /**
    * Class constructor
-   * 
+   *
    * @param sfContext $context
    * @param array $themes   An array of theme configurations to be used as
    *                        the available themes to switch to
@@ -72,20 +71,20 @@ class sfThemeManager
 
   /**
    * Sets the given theme as the current theme and loads it up
-   * 
+   *
    * This does everything from setting the template to adding stylesheets
    * and javascripts
-   * 
+   *
    * @param string $theme The name of the theme to load
    */
   public function setCurrentTheme($theme)
   {
     // Make sure the theme object exists, this will trigger an exception if it does not
     $this->getThemeObject($theme);
-    
+
     /*
      * Don't load the theme if it's already the current theme
-     * 
+     *
      */
     if ($theme == $this->getCurrentTheme())
     {
@@ -96,13 +95,13 @@ class sfThemeManager
        * that case, we still need to set the right layout for the new action
        */
       $this->_changeLayout($this->_getLayoutPath($this->getCurrentThemeObject()->getLayout()));
-      
+
       return;
     }
 
     // unload the current theme
     $this->_unloadCurrentTheme();
-    
+
     // set the current theme and load it
     $this->_currentTheme = $theme;
     $this->_loadCurrentTheme();
@@ -110,9 +109,9 @@ class sfThemeManager
 
   /**
    * Set/add a theme to the theme manager
-   * 
+   *
    * The theme can be an sfTheme instance of just theme configuration
-   * 
+   *
    * @param string $name The name of the theme
    * @param mixed $theme  Either an sfTheme object or an array of configuration
    *                      that can be used to create a theme object
@@ -161,7 +160,7 @@ class sfThemeManager
     // Set loaded flag
     $this->_isLoaded = true;
   }
-  
+
   /**
    * Unloads the current theme
    */
@@ -190,7 +189,7 @@ class sfThemeManager
   {
     $info = pathinfo($layoutPath);
     $path = $info['dirname'].'/'.$info['filename'];
-    
+
     $actionEntry = $this->_context->getController()->getActionStack()->getLastEntry();
     $module = $actionEntry ? $actionEntry->getModuleName() : $this->_context->getRequest()->getParameter('module');
     $action = $actionEntry ? $actionEntry->getActionName() : $this->_context->getRequest()->getParameter('action');
@@ -211,7 +210,7 @@ class sfThemeManager
 
   /**
    * Adds the given stylesheets to the response object
-   * 
+   *
    * @param array $stylesheets The stylesheets to add to the response
    * @return an array of the stylesheets files just added
    */
@@ -222,7 +221,7 @@ class sfThemeManager
 
   /**
    * Adds the given javascripts to the response object
-   * 
+   *
    * @param array $javascripts The javascripts to add to the response
    * @return an array of the javascripts files just added
    */
@@ -234,12 +233,12 @@ class sfThemeManager
   /**
    * Runs a series of add$Type statements by parsing the array of assets
    * and figuring out the correct options.
-   * 
+   *
    * The assets array comes straight from app.yml, which has the same
    * format available for view.yml assets
-   * 
+   *
    * The majority of this function taken from sfViewConfigHandler::addAssets()
-   * 
+   *
    * @param string $type Either Stylesheet or Javascript
    */
   protected function _addAssets($type, $assets)
@@ -269,7 +268,7 @@ class sfThemeManager
 
       // Keep a full array of the assets and their options
       $processedAssets[] = array('file' => $key, 'position' => $position, 'options' => $options);
-      
+
       // Keep a simple array of just the assets
       $assetFiles[] = $key;
       // Add the asset to the response
@@ -287,17 +286,17 @@ class sfThemeManager
     {
       // Add the asset to the response
       $response->$method($asset['file'], $asset['position'], $asset['options']);
-      
+
       // Record a simple array of the filenames, for returning
       $assetFiles[] = $asset['file'];
     }
-    
+
     return $assetFiles;
   }
 
   /**
    * Calls the given array of callables
-   * 
+   *
    * @param array $callables The array of callables to call
    */
   protected function _invokeCallables($callables)
@@ -341,7 +340,7 @@ class sfThemeManager
 
   /**
    * Returns the name of the currently loaded theme
-   * 
+   *
    * @return string
    */
   public function getCurrentTheme()
@@ -351,7 +350,7 @@ class sfThemeManager
 
   /**
    * Returns the current theme object, if there is one
-   * 
+   *
    * @return sfTheme or false if there is not current theme
    */
   public function getCurrentThemeObject()
@@ -362,7 +361,7 @@ class sfThemeManager
   /**
    * Get the theme object for a given theme name
    *
-   * @param string $name 
+   * @param string $name
    * @return sfTheme $theme
    */
   public function getThemeObject($theme)
@@ -426,10 +425,10 @@ class sfThemeManager
 
     return $this->_layoutPaths[$layout];
   }
-  
+
   /**
    * Calculates the location of a layout, which could live in several locations.
-   * 
+   *
    * Specifically, the layout file for a theme could live in any "templates"
    * file found in the application dir or any enabled plugins
    */
@@ -456,7 +455,7 @@ class sfThemeManager
 
   /**
    * Returns the current sfThemeToolkit
-   * 
+   *
    * @return sfThemeToolkit
    */
   protected function _getThemeToolkit()
@@ -468,9 +467,9 @@ class sfThemeManager
 
   /**
    * Creates a new instance of this class based on the available application configuration.
-   * 
+   *
    * This should not be called directly - use sfThemePluginConfiguration::getThemeManager() instead
-   * 
+   *
    * @return sfThemeController
    */
   public static function createInstance(sfContext $context)
@@ -487,7 +486,7 @@ class sfThemeManager
         unset($themes[$key]);
       }
     }
-    
+
     return new $class($context, $themes, $themeClass);
   }
 }
