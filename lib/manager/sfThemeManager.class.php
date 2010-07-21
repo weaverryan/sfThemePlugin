@@ -399,6 +399,7 @@ class sfThemeManager
   {
     if ($this->_availableThemes === null)
     {
+      $this->_availableThemes = array();
       $themes = $this->getThemes();
       foreach ($themes as $name => $theme)
       {
