@@ -187,6 +187,12 @@ class sfThemeManager
    */
   protected function _changeLayout($layoutPath)
   {
+    // if ajax, don't screw with the layout
+    if ($this->_context->getRequest()->isXmlHttpRequest())
+    {
+      return;
+    }
+
     $info = pathinfo($layoutPath);
     $path = $info['dirname'].'/'.$info['filename'];
 
