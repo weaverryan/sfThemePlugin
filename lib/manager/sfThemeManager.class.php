@@ -187,12 +187,12 @@ class sfThemeManager
    */
   protected function _changeLayout($layoutPath)
   {
-    // if ajax or non-html format, don't screw with the layout
-    $request = $this->_context->getRequest();
-    if ($request->isXmlHttpRequest() || $request->getRequestFormat() != 'html')
+    // if ajax, don't screw with the layout
+    if ($this->_context->getRequest()->isXmlHttpRequest())
     {
       return;
     }
+
 
     $info = pathinfo($layoutPath);
     $path = $info['dirname'].'/'.$info['filename'];
@@ -200,6 +200,10 @@ class sfThemeManager
     $actionEntry = $this->_context->getController()->getActionStack()->getLastEntry();
     $module = $actionEntry ? $actionEntry->getModuleName() : $this->_context->getRequest()->getParameter('module');
     $action = $actionEntry ? $actionEntry->getActionName() : $this->_context->getRequest()->getParameter('action');
+
+    var_dump('symfony.view.'.$module.'_'.$action.'_layout');
+    var_dump(sfConfig::get('symfony.view.'.$module.'_'.$action.'_layout'));
+    //die;
 
     // Set the layout for the given module & action
     sfConfig::set('symfony.view.'.$module.'_'.$action.'_layout', $path);
