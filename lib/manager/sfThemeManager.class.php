@@ -193,17 +193,12 @@ class sfThemeManager
       return;
     }
 
-
     $info = pathinfo($layoutPath);
     $path = $info['dirname'].'/'.$info['filename'];
 
     $actionEntry = $this->_context->getController()->getActionStack()->getLastEntry();
     $module = $actionEntry ? $actionEntry->getModuleName() : $this->_context->getRequest()->getParameter('module');
     $action = $actionEntry ? $actionEntry->getActionName() : $this->_context->getRequest()->getParameter('action');
-
-    var_dump('symfony.view.'.$module.'_'.$action.'_layout');
-    var_dump(sfConfig::get('symfony.view.'.$module.'_'.$action.'_layout'));
-    //die;
 
     // Set the layout for the given module & action
     sfConfig::set('symfony.view.'.$module.'_'.$action.'_layout', $path);
