@@ -187,8 +187,9 @@ class sfThemeManager
    */
   protected function _changeLayout($layoutPath)
   {
-    // if ajax, don't screw with the layout
-    if ($this->_context->getRequest()->isXmlHttpRequest())
+    // if ajax or non-html format, don't screw with the layout
+    $request = $this->_context->getRequest();
+    if ($request->isXmlHttpRequest() || $request->getRequestFormat() != 'html')
     {
       return;
     }
