@@ -46,6 +46,9 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
       $themeUser = new sfThemeUser();
       $this->dispatcher->connect('user.method_not_found', array($themeUser, 'listenUserMethodNotFound'));
 
+      // Add listener on template.filter_parameters to add sf_theme var to view
+      $this->dispatcher->connect('template.filter_parameters', array($themeUser, 'filterTemplateParameters'));
+
       // extend the actions class
       $actionObject = new sfThemeActions($this->getThemeController());
       $this->dispatcher->connect('component.method_not_found', array($actionObject, 'listenComponentMethodNotFound'));

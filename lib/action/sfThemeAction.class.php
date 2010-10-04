@@ -12,6 +12,7 @@
  */
 class sfThemeActions
 {
+  /*protected $sf_theme; */
 
   /**
    * The action instance that triggered the component.method_not_found event
@@ -61,17 +62,18 @@ class sfThemeActions
   /**
    * Load the given Sympal theme
    *
-   * @param string $name 
+   * @param string $name
+   * @param string $template subtemplate, if any
    * @return void
    */
-  public function loadTheme($name)
+  public function loadTheme($name, $template=false)
   {
     $this->_action
       ->getContext()
       ->getConfiguration()
       ->getPluginConfiguration('sfThemePlugin')
       ->getThemeManager()
-      ->setCurrentTheme($name);
+      ->setCurrentTheme(($template === false) ? $name : "{$name}_{$template}");
   }
 
   /**

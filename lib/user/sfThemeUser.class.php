@@ -69,12 +69,33 @@ class sfThemeUser
    */
   public function getThemeConfig($name = null, $default = null)
   {
-
     return sfContext::getInstance()
             ->getConfiguration()
             ->getPluginConfiguration('sfThemePlugin')
             ->getThemeManager()
             ->getCurrentThemeObject()->getConfig($name, $default);
   }
+
+  /**
+   * Listens to the template.filter_parameters event
+   *
+   * Adds a few variables to the view
+   *   * sf_theme
+   */
+  public function filterTemplateParameters(sfEvent $event, $parameters)
+  {
+    // Don't override the variable if it's not set
+    if (!isset($parameters['sf_theme']))
+    {
+      $parameters['sf_theme'] = sfContext::getInstance()
+                                  ->getConfiguration()
+                                  ->getPluginConfiguration('sfThemePlugin')
+                                  ->getThemeManager()
+                                  ->getCurrentThemeObject();
+    }
+
+    return $parameters;
+  }
+
 
 }
