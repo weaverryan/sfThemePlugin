@@ -11,7 +11,7 @@ class sfThemeWebDebugPanel extends sfWebDebugPanel
 {
   public function getTitle()
   {
-    return '<img src="/sfThemePlugin/images/theme.png" alt="Theme Management" height="16" width="16" /> themes';
+    return '<img src="'.$this->webDebug->getOption('image_root_path').'/../../../sfThemePlugin/images/theme.png" alt="Theme Management" height="16" width="16" /> themes';
   }
 
   public function getPanelTitle()
@@ -40,7 +40,7 @@ class sfThemeWebDebugPanel extends sfWebDebugPanel
       $content .= sprintf(
         '<h2>
           --> Theme "%s" is currently being used for this session
-          %s
+          [ %s ]
         </h2>',
         $context->getUser()->getCurrentTheme(),
         $this->_getThemeSwitchLink('clear', 'Reset theme')
@@ -66,7 +66,9 @@ class sfThemeWebDebugPanel extends sfWebDebugPanel
         $switch = '<i>url theme changing disabled</i>';
       }
       
-      $panel .= sprintf('<tr><td class="sfWebDebugLogType">%s %s</td><td style="text-align: center">%s</td><td style="text-align: center">%s</td><td style="text-align: center">%s</td></tr>', $themeToggler, $theme, $available, $current, $switch);
+      $theme_description = (isset ($config['description'])) ? $config['description'] : $theme;
+
+      $panel .= sprintf('<tr><td class="sfWebDebugLogType">%s %s</td><td style="text-align: center">%s</td><td style="text-align: center">%s</td><td style="text-align: center">%s</td></tr>', $themeToggler, $theme_description, $available, $current, $switch);
 
       $panel .= sprintf('<tr id="web_debug_details_%s" style="display: none;"><td colspan="4">%s</td></tr>', $theme, self::_arrayToList($config));
     }
