@@ -68,6 +68,10 @@ class sfThemePluginConfiguration extends sfPluginConfiguration
 
     // Refresh the theme from the context
     $this->_refreshTheme();
+
+    // throw a post-bootstrap event. 
+    $event = new sfEvent($this, 'sf_theme.bootstrap');
+    $this->dispatcher->notify($event);
   }
 
   /**
