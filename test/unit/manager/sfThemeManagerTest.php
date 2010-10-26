@@ -152,7 +152,7 @@ $t->info('2 - Set some themes and see what happens');
     // This is how the css is loaded in if using the alternate syntax in app.yml
     $cssOptionThemeconfig = $themeConfig;
     $cssOptionThemeconfig['stylesheets'] = array(
-      array('main.css' => array('media' => 'print', 'position' => 'first'))
+      'main.css' => array('media' => 'print', 'position' => 'first')
     );
     $manager->addTheme('css_theme', $cssOptionThemeconfig);
     $manager->setCurrentTheme('css_theme');

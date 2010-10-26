@@ -253,16 +253,15 @@ class sfThemeManager
     $response = $this->_context->getResponse();
 
     $processedAssets = array();
-    foreach ((array) $assets as $asset)
+    foreach ((array) $assets as $key => $asset)
     {
       $position = 'last'; // default position to last
       if (is_array($asset))
       {
-        $key = key($asset);
-        $options = $asset[$key];
-        if (isset($options['position']))
+        $options = $asset;
+        if (isset($asset['position']))
         {
-          $position = $options['position'];
+          $position = $asset['position'];
           unset($options['position']);
         }
       }
