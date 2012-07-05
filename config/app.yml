@@ -1,4 +1,4 @@
-all:
+default:
   theme:
     # Disable/Enable theming globally
     enabled:           true
