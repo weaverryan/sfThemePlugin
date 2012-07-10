@@ -493,6 +493,18 @@ class sfThemeManager
       }
     }
 
+    // Accept inheritance, until 3 levels
+    for ($i=1;$i<=3;$i++)
+    {
+      foreach ($themes as $key => $themeConfig)
+      {
+        if (isset($themeConfig['inherit']) && isset($themes[$themeConfig['inherit']]))
+        {
+          $themes[$key] = array_merge($themes[$themeConfig['inherit']], $themeConfig);
+        }
+      }
+    }
+
     return new $class($context, $themes, $themeClass);
   }
 }

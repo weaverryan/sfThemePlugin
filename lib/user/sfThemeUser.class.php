@@ -56,4 +56,46 @@ class sfThemeUser
   {
     return $this->_user->getAttribute('current_theme');
   }
+
+  /**
+   * Returns a given config value or default if the config doesn't exist
+   *
+   * You can also return all of the config by not passing any arguments
+   *
+   * @param string $name    The name of the config
+   * @param mixed $default  The default to return if the config doesn't exist
+   *
+   * @return mixed
+   */
+  public function getThemeConfig($name = null, $default = null)
+  {
+    return sfContext::getInstance()
+            ->getConfiguration()
+            ->getPluginConfiguration('sfThemePlugin')
+            ->getThemeManager()
+            ->getCurrentThemeObject()->getConfig($name, $default);
+  }
+
+  /**
+   * Listens to the template.filter_parameters event
+   *
+   * Adds a few variables to the view
+   *   * sf_theme
+   */
+  public function filterTemplateParameters(sfEvent $event, $parameters)
+  {
+    // Don't override the variable if it's not set
+    if (!isset($parameters['sf_theme']))
+    {
+      $parameters['sf_theme'] = sfContext::getInstance()
+                                  ->getConfiguration()
+                                  ->getPluginConfiguration('sfThemePlugin')
+                                  ->getThemeManager()
+                                  ->getCurrentThemeObject();
+    }
+
+    return $parameters;
+  }
+
+
 }

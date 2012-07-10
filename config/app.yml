@@ -1,4 +1,4 @@
-all:
+default:
   theme:
     # Disable/Enable theming globally
     enabled:           true
@@ -37,6 +37,7 @@ all:
     themes: []
       # my_theme:
       #   layout:   my_theme               # The name of the layout file to use
+      #   templates_ir:   themeMythemePlugin/templates/ # Directory for theme templates
       #   javascripts: [my_file.js]        # Array of javascripts for this theme
       #   stylesheets: [theme_styles.css]  # Array of stylesheets for this theme
       #   enabled: false                   # Enable/disable the theme [default=true]
